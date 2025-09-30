@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Character Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f9;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+    }
+
+    .question {
+      font-size: 18px;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .feedback {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .option-button {
+      display: inline-block;
+      padding: 15px;
+      width: 200px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: #ddd;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .option-button:disabled {
+      background-color: #eee;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .incorrect {
+      color: red;
+    }
+
+    .hard-mode-checkbox {
+      margin: 15px 0;
+    }
+
+    #next-button {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Chinese Character Quiz</h1>
+
+  <label class="hard-mode-checkbox">
+    <input type="checkbox" id="hardModeCheckbox"> Hard Mode (8 options)
+  </label>
+
+  <div id="character" style="font-size: 36px;"></div>
+
+  <div class="question" id="meaningQuestion">What is the meaning of this character?</div>
+  <div id="meaningOptions" class="options-container"></div>
+  <div id="meaningFeedback" class="feedback"></div>
+
+  <div class="question" id="pinyinQuestion">What is the correct pinyin?</div>
+  <div id="pinyinOptions" class="options-container"></div>
+  <div id="pinyinFeedback" class="feedback"></div>
+
+  <button id="nextButton" class="button" onclick="nextQuestion()">Next Character</button>
+
+  <script>
+    const wordBank = [
+      {"character": "不", "pinyin": "bù", "english": "not, no"},
+      {"character": "大", "pinyin": "dà", "english": "big, large"},
+      {"character": "的", "pinyin": "de", "english": "possessive particle; of"},
+      {"character": "个", "pinyin": "gè", "english": "measure word; individual"},
+      {"character": "国", "pinyin": "guó", "english": "country, nation"},
+      {"character": "和", "pinyin": "hé", "english": "and; with"},
+      {"character": "来", "pinyin": "lái", "english": "to come"},
+      {"character": "了", "pinyin": "le", "english": "completed action marker"},
+      {"character": "们", "pinyin": "men", "english": "plural marker for pronouns"},
+      {"character": "人", "pinyin": "rén", "english": "person, people"},
+      {"character": "上", "pinyin": "shàng", "english": "up, on, above"},
+      {"character": "是", "pinyin": "shì", "english": "to be"},
+      {"character": "他", "pinyin": "tā", "english": "he, him"},
+      {"character": "为", "pinyin": "wèi", "english": "for; because of"},
+      {"character": "我", "pinyin": "wǒ", "english": "I, me"},
+      {"character": "一", "pinyin": "yī", "english": "one"},
+      {"character": "有", "pinyin": "yǒu", "english": "to have, there is/are"},
+      {"character": "在", "pinyin": "zài", "english": "at, in, on"},
+      {"character": "这", "pinyin": "zhè", "english": "this"},
+      {"character": "中", "pinyin": "zhōng", "english": "middle, in, among"},
+    ];
+
+    let remainingWords = [...wordBank];
+    let currentWord = {};
+    let correctMeaning = "";
+    let correctPinyin = "";
+    let meaningAnswered = false;
+    let pinyinAnswered = false;
+    let hardMode = false;
+
+    document.getElementById('hardModeCheckbox').addEventListener('change', toggleHardMode);
+
+    function toggleHardMode() {
+      hardMode = document.getElementById('hardModeCheckbox').checked;
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      if (remainingWords.length === 0) {
+        remainingWords = [...wordBank];
+        shuffle(remainingWords);
+      }
+
+      meaningAnswered = false;
+      pinyinAnswered = false;
+      document.getElementById('meaningFeedback').textContent = '';
+      document.getElementById('pinyinFeedback').textContent = '';
+      document.getElementById('nextButton').style.display = 'none';
+
+      currentWord = remainingWords.pop();
+      correctMeaning = currentWord.english;
+      correctPinyin = currentWord.pinyin;
+
+      document.getElementById('character').textContent = currentWord.character;
+
+      setupOptions();
+    }
+
+    function setupOptions() {
+      const optionCount = hardMode ? 8 : 4;
+
+      // Setup Meaning Options
+      const wrongMeanings = randomSample(
+        wordBank.filter(word => word.english !== correctMeaning).map(w => w.english),
+        optionCount - 1
+      );
+      const meaningOptions = [...wrongMeanings, correctMeaning];
+      shuffle(meaningOptions);
+
+      const meaningOptionsContainer = document.getElementById('meaningOptions');
+      meaningOptionsContainer.innerHTML = '';
+      meaningOptions.forEach((option, index) => {
+        const button = createOptionButton(option, () => checkMeaning(index));
+        meaningOptionsContainer.appendChild(button);
+      });
+
+      // Setup Pinyin Options
+      const wrongPinyins = randomSample(
+        wordBank.filter(word => word.pinyin !== correctPinyin).map(w => w.pinyin),
+        optionCount - 1
+      );
+      const pinyinOptions = [...wrongPinyins, correctPinyin];
+      shuffle(pinyinOptions);
+
+      const pinyinOptionsContainer = document.getElementById('pinyinOptions');
+      pinyinOptionsContainer.innerHTML = '';
+      pinyinOptions.forEach((option, index) => {
+        const button = createOptionButton(option, () => checkPinyin(index));
+        pinyinOptionsContainer.appendChild(button);
+      });
+    }
+
+    function createOptionButton(optionText, clickHandler) {
+      const button = document.createElement('button');
+      button.textContent = optionText;
+      button.className = 'option-button';
+      button.onclick = clickHandler;
+      return button;
+    }
+
+    function checkMeaning(index) {
+      const selected = document.getElementById('meaningOptions').children[index].textContent;
+      const feedback = document.getElementById('meaningFeedback');
+      if (selected === correctMeaning) {
+        feedback.textContent = '✅ Correct meaning!';
+        feedback.classList.add('correct');
+      } else {
+        feedback.textContent = `❌ Correct meaning: ${correctMeaning}`;
+        feedback.classList.add('incorrect');
+      }
+
+      meaningAnswered = true;
+      checkReadyForNext();
+    }
+
+    function checkPinyin(index) {
+      const selected = document.getElementById('pinyinOptions').children[index].textContent;
+      const feedback = document.getElementById('pinyinFeedback');
+      if (selected === correctPinyin) {
+        feedback.textContent = '✅ Correct pinyin!';
+        feedback.classList.add('correct');
+      } else {
+        feedback.textContent = `❌ Correct pinyin: ${correctPinyin}`;
+        feedback.classList.add('incorrect');
+      }
+
+      pinyinAnswered = true;
+      checkReadyForNext();
+    }
+
+    function checkReadyForNext() {
+      if (meaningAnswered && pinyinAnswered) {
+        document.getElementById('nextButton').style.display = 'inline-block';
+      }
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function randomSample(array, size) {
+      const result = [];
+      while (result.length < size) {
+        const index = Math.floor(Math.random() * array.length);
+        result.push(array[index]);
+      }
+      return result;
+    }
+
+    nextQuestion();
+  </script>
+
+</body>
+</html>
