@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Flashcards - Hard Mode</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    .options {
+      margin-top: 20px;
+    }
+
+    button.option {
+      display: block;
+      width: 100%;
+      background: #eee;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button.option:hover {
+      background: #ddd;
+    }
+
+    .correct {
+      background: #4CAF50 !important;
+      color: white;
+    }
+
+    .incorrect {
+      background: #f44336 !important;
+      color: white;
+    }
+
+    #nextBtn {
+      margin-top: 20px;
+      display: none;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    #nextBtn:hover {
+      background: #1976D2;
+    }
+
+    #score {
+      font-size: 18px;
+      margin-top: 15px;
+      color: #333;
+    }
+
+    #hardModeBtn {
+      margin-bottom: 20px;
+      background: #FF9800;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    #hardModeBtn:hover {
+      background: #F57C00;
+    }
+
+    #timer {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <button id="hardModeBtn" onclick="toggleHardMode()">Toggle Hard Mode</button>
+  <div class="card" id="card">
+    <h2 id="term"></h2>
+    <div class="options" id="options"></div>
+    <button id="nextBtn" onclick="nextCard()">Next</button>
+    <div id="timer"></div>
+    <div id="score"></div>
+  </div>
+
+  <script>
+    const vocab = [
+      {term: "Provisional", definition: "arranged or existing for the present, possibly to be changed later."},
+      {term: "Lurid", definition: "vividly shocking or sensational terms, especially giving explicit details of crimes or sexual matters."},
+      {term: "Pugnacious", definition: "eager or quick to argue, quarrel, or fight."},
+      {term: "Perfunctory", definition: "(of an action or gesture) carried out with a minimum of effort or reflection."},
+      {term: "Aplomb", definition: "self-confidence or assurance, especially when in a demanding situation."},
+      {term: "Opaque", definition: "not able to be seen through; not transparent."},
+      {term: "Venal", definition: "showing or motivated by susceptibility to bribery."},
+      {term: "Noxious", definition: "harmful, poisonous, or very unpleasant."},
+      {term: "Extraneous", definition: "irrelevant or unrelated to the subject being dealt with."},
+      {term: "Duplicitous", definition: "deceitful."},
+      {term: "Epiphany", definition: "a moment of sudden revelation or insight."},
+      {term: "Insidious", definition: "proceeding in a gradual, subtle way, but with harmful effects."},
+      {term: "Inane", definition: "silly; stupid."}
+    ];
+
+    let current = 0;
+    let score = 0;
+    let hardMode = false;
+    let timerInterval;
+
+    const termElem = document.getElementById("term");
+    const optionsElem = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const scoreElem = document.getElementById("score");
+    const timerElem = document.getElementById("timer");
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function toggleHardMode() {
+      hardMode = !hardMode;
+      alert(hardMode ? "Hard Mode ON: 5 seconds per question!" : "Hard Mode OFF");
+      current = 0;
+      score = 0;
+      shuffle(vocab);
+      loadCard();
+    }
+
+    function loadCard() {
+      clearInterval(timerInterval);
+      nextBtn.style.display = "none";
+      optionsElem.innerHTML = "";
+      timerElem.textContent = "";
+
+      if (current >= vocab.length) {
+        document.getElementById("card").innerHTML = `
+          <h2>Quiz Complete!</h2>
+          <p>Your final score: <strong>${score}/${vocab.length}</strong></p>
+        `;
+        return;
+      }
+
+      const word = vocab[current];
+      termElem.textContent = word.term;
+
+      // Get 3 random wrong definitions
+      let wrongDefs = shuffle(vocab.filter(v => v.term !== word.term))
+                        .slice(0, 3)
+                        .map(v => v.definition);
+      let allOptions = shuffle([word.definition, ...wrongDefs]);
+
+      allOptions.forEach(def => {
+        const btn = document.createElement("button");
+        btn.classList.add("option");
+        btn.textContent = def;
+        btn.onclick = () => checkAnswer(btn, word.definition);
+        optionsElem.appendChild(btn);
+      });
+
+      if (hardMode) startTimer(5, word.definition);
+    }
+
+    function startTimer(seconds, correctDef) {
+      let timeLeft = seconds;
+      timerElem.textContent = `Time: ${timeLeft}s`;
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerElem.textContent = `Time: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          autoFail(correctDef);
+        }
+      }, 1000);
+    }
+
+    function autoFail(correctDef) {
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach(b => {
+        b.disabled = true;
+        if (b.textContent === correctDef) b.classList.add("correct");
+      });
+      scoreElem.textContent = `Score: ${score}/${vocab.length}`;
+      nextBtn.style.display = "inline-block";
+    }
+
+    function checkAnswer(button, correctDef) {
+      clearInterval(timerInterval);
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach(b => {
+        b.disabled = true;
+        if (b.textContent === correctDef) b.classList.add("correct");
+      });
+
+      if (button.textContent === correctDef) {
+        score++;
+      } else {
+        button.classList.add("incorrect");
+      }
+
+      scoreElem.textContent = `Score: ${score}/${vocab.length}`;
+      nextBtn.style.display = "inline-block";
+    }
+
+    function nextCard() {
+      current++;
+      loadCard();
+    }
+
+    shuffle(vocab);
+    loadCard();
+  </script>
+</body>
+</html>
