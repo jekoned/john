@@ -113,21 +113,84 @@
   </div>
 
   <script>
-    const vocab = [
-      {term: "Provisional", definition: "arranged or existing for the present, possibly to be changed later."},
-      {term: "Lurid", definition: "vividly shocking or sensational terms, especially giving explicit details of crimes or sexual matters."},
-      {term: "Pugnacious", definition: "eager or quick to argue, quarrel, or fight."},
-      {term: "Perfunctory", definition: "(of an action or gesture) carried out with a minimum of effort or reflection."},
-      {term: "Aplomb", definition: "self-confidence or assurance, especially when in a demanding situation."},
-      {term: "Opaque", definition: "not able to be seen through; not transparent."},
-      {term: "Venal", definition: "showing or motivated by susceptibility to bribery."},
-      {term: "Noxious", definition: "harmful, poisonous, or very unpleasant."},
-      {term: "Extraneous", definition: "irrelevant or unrelated to the subject being dealt with."},
-      {term: "Duplicitous", definition: "deceitful."},
-      {term: "Epiphany", definition: "a moment of sudden revelation or insight."},
-      {term: "Insidious", definition: "proceeding in a gradual, subtle way, but with harmful effects."},
-      {term: "Inane", definition: "silly; stupid."}
-    ];
+const vocab = [
+  // Elements of Art
+  {term: "Color", definition: "Light reflected off an object."},
+  {term: "Value", definition: "The depth of shade; lightness or darkness of a color."},
+  {term: "Shape", definition: "A 2D, flat enclosed area."},
+  {term: "Form", definition: "A 3D object with depth."},
+  {term: "Line", definition: "A mark created by a moving point from A to B."},
+  {term: "Texture", definition: "The real or implied surface quality or sensation."},
+  {term: "Space", definition: "The area in which art is arranged."},
+  {term: "Positive Space", definition: "The main subject or silhouette in a composition."},
+  {term: "Negative Space", definition: "The background or empty areas around the subject."},
+
+  // Principles of Design
+  {term: "Contrast", definition: "Creating a distinct difference in value or texture."},
+  {term: "Proportion", definition: "The balance of size relationships in a design."},
+  {term: "Balance", definition: "The distribution of visual weight in a design."},
+  {term: "Symmetry", definition: "Even distribution of visual weight."},
+  {term: "Asymmetry", definition: "Uneven distribution of visual weight."},
+  {term: "Emphasis", definition: "Using a focal point to draw attention."},
+  {term: "Movement", definition: "Guiding the viewer’s eye through a design."},
+  {term: "Rhythm", definition: "The visual beat of a design."},
+  {term: "Pattern", definition: "The repetition of elements."},
+
+  // Typography
+  {term: "Hierarchy", definition: "The order in which text is read, based on design."},
+  {term: "Serif", definition: "A typeface with small decorative strokes at letter ends."},
+  {term: "Sans-serif", definition: "A typeface without decorative strokes ('without serif')."},
+  {term: "Script", definition: "A typeface resembling handwritten or cursive text."},
+  {term: "Decorative", definition: "A stylized typeface used for themed or expressive purposes."},
+  {term: "Tracking", definition: "The overall spacing between letters in a word."},
+  {term: "Leading", definition: "The vertical space between lines of text."},
+  {term: "Kerning", definition: "The spacing between two individual characters."},
+
+  // Hotkeys
+  {term: "Ctrl+Shift+N", definition: "Create a new layer."},
+  {term: "Ctrl+G", definition: "Group selected layers."},
+  {term: "Ctrl+Shift+G", definition: "Ungroup layers."},
+  {term: "Ctrl+J", definition: "Duplicate layer."},
+  {term: "Ctrl+Shift+S", definition: "Save As."},
+  {term: "Ctrl+Z", definition: "Undo last action."},
+  {term: "W", definition: "Magic Wand Tool."},
+  {term: "I", definition: "Eyedropper Tool."},
+  {term: "M", definition: "Marquee Tool."},
+  {term: "Ctrl+T", definition: "Transform tools."},
+  {term: "V", definition: "Move Tool."},
+  {term: "L", definition: "Lasso Tool."},
+  {term: "P", definition: "Pen Tool."},
+  {term: "U", definition: "Shape Tool."},
+  {term: "H", definition: "Hand Tool."},
+  {term: "S", definition: "Stamp Tool."},
+  {term: "Z", definition: "Zoom Tool."},
+  {term: "T", definition: "Text Tool."},
+  {term: "G", definition: "Gradient Tool."},
+  {term: "B", definition: "Pencil/Brush Tool."},
+  {term: "E", definition: "Eraser Tool."},
+  {term: "C", definition: "Crop Tool."},
+  {term: "X", definition: "Swap background and foreground colors."},
+
+  // Color Theory
+  {term: "Primary Colors", definition: "Red, Yellow, and Blue."},
+  {term: "Secondary Colors", definition: "Purple, Green, and Orange."},
+  {term: "Tertiary Colors", definition: "Mixes like Red-Orange, Yellow-Green, Blue-Green, etc."},
+  {term: "Shade", definition: "A color darkened by adding black."},
+  {term: "Tint", definition: "A color lightened by adding white."},
+  {term: "Tone", definition: "A color desaturated by adding grey."},
+  {term: "High Contrast", definition: "Strong differences between light and dark values."},
+  {term: "Low Contrast", definition: "Tonal, muted differences that appear muddy."},
+  {term: "Saturation", definition: "How intense or pigmented a color is."},
+  {term: "Vibrancy", definition: "How light or dark a color appears."},
+  {term: "CMYK", definition: "Cyan, Magenta, Yellow, Key (black); used for printing."},
+  {term: "60-30-10 Rule", definition: "Color harmony rule dividing main, secondary, and accent colors."},
+  {term: "Monologous", definition: "Different shades of the same color."},
+  {term: "Triadic", definition: "Three colors evenly spaced on the color wheel."},
+  {term: "Tetradic", definition: "Four colors evenly spaced on the color wheel."},
+  {term: "Analogous", definition: "Colors next to each other on the color wheel."},
+  {term: "Complementary", definition: "Colors opposite each other on the color wheel."},
+];
+
 
     let current = 0;
     let score = 0;
