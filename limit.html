@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mandarin 2 Full Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  #prompt { font-size: 18px; margin-bottom: 10px; }
+  #question { font-size: 42px; margin: 20px 0; }
+  .choice {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  .choice:hover { background: #f0f0f0; }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Mandarin 2 Quiz</h1>
+
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
+<script>
+const partC = [
+  { prompt:"今天我 ___ 校。 (first blank)", q:"", a:"去", choices:["去","来","吃","学","今"] },
+  { prompt: "今天我去 ___ 校.", q:"", a:"学", choices:["学", "天", "校", "去", "今"] },
+  { prompt:"我 ___ 饭，也看 ___。 (first blank)", q:"", a:"吃", choices:["吃","去","来","学","今"] },
+  { prompt: "我 _吃__ 饭，也看 ___。 (second blank)", q:"", a:"书", choices:["书", "水", "菜", "电影", "电视"] }
+];
+
+const otherQuestions = [
+  { prompt:"Choose the correct pinyin", q:"今", a:"jīn" },
+  { prompt:"Choose the correct pinyin", q:"天", a:"tiān" },
+  { prompt:"Choose the correct pinyin", q:"星", a:"xīng" },
+  { prompt:"Choose the correct pinyin", q:"期", a:"qī" },
+  { prompt:"Choose the correct pinyin", q:"学", a:"xué" },
+  { prompt:"Choose the correct pinyin", q:"校", a:"xiào" },
+  { prompt:"Choose the correct pinyin", q:"去", a:"qù" },
+  { prompt:"Choose the correct pinyin", q:"来", a:"lái" },
+  { prompt:"Choose the correct pinyin", q:"吃", a:"chī" },
+  { prompt:"Choose the correct pinyin", q:"饭", a:"fàn" },
+  { prompt:"Choose the correct characters", q:"jīntiān", a:"今天" },
+  { prompt:"Choose the correct characters", q:"xīngqī", a:"星期" },
+  { prompt:"Choose the correct characters", q:"xuéxiào", a:"学校" },
+  { prompt:"Choose the correct characters", q:"péngyou", a:"朋友" },
+  { prompt:"Choose the correct characters", q:"chī fàn", a:"吃饭" },
+  { prompt:"Select the word that means 'today' in 今天是星期五。", q:"", a:"今天", choices:["今天","星期","五"] },
+  { prompt:"Select the word that means 'friend' in 我跟朋友去学校。", q:"", a:"朋友", choices:["我","朋友","学校"] },
+  { prompt:"What does 去 mean in 我跟朋友去学校？", q:"", a:"go", choices:["eat","go","come","school"] }
+];
+
+// Shuffle other questions
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+const shuffledOtherQuestions = shuffle(otherQuestions);
+
+// Combine shuffled questions with Part C in order
+const quiz = [...shuffledOtherQuestions, ...partC];
+
+const pinyinPool = ["jīn","tiān","xīng","qī","xué","xiào","qù","lái","chī","fàn","péngyou","jīntiān"];
+const charPool = ["今天","星期","学校","朋友","吃饭","去","来","吃","饭","学"];
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+function load() {
+  answered = false;
+  const item = quiz[index];
+  document.getElementById("prompt").textContent = item.prompt;
+  document.getElementById("question").textContent = item.q;
+  document.getElementById("progress").textContent = `Question ${index+1} of ${quiz.length}`;
+
+  let choices;
+  if (item.choices) {
+    choices = shuffle(item.choices.slice());
+  } else {
+    choices = [item.a];
+    let pool = item.a.match(/[a-z]/) ? pinyinPool : charPool;
+    shuffle(pool);
+    for (let p of pool) {
+      if (choices.length === 4) break;
+      if (!choices.includes(p)) choices.push(p);
+    }
+    choices = shuffle(choices);
+  }
+
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
+  choices.forEach(c => {
+    const el = document.createElement("div");
+    el.className = "choice";
+    el.textContent = c;
+    el.onclick = () => select(c, el, item.a);
+    div.appendChild(el);
+  });
+}
+
+function select(choice, el, correctAnswer) {
+  if (answered) return;
+  answered = true;
+
+  if (choice === correctAnswer) {
+    score++;
+    el.style.background = "#c8f7c5"; // green for correct
+  } else {
+    el.style.background = "#f7c5c5"; // red for wrong
+    // show correct answer
+    const div = document.getElementById("choices");
+    Array.from(div.children).forEach(child => {
+      if (child.textContent === correctAnswer) {
+        child.style.background = "#c8f7c5";
+        child.style.fontWeight = "bold";
+      }
+    });
+  }
+}
+
+function nextQuestion() {
+  if (!answered) return;
+  index++;
+  if (index < quiz.length) {
+    load();
+  } else {
+    document.body.innerHTML = `<h1>Quiz Complete</h1><h2>Your Score: ${score} / ${quiz.length}</h2>`;
+  }
+}
+
+load();
+</script>
+
+</body>
+</html>
