@@ -1,9 +1,11 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vocabulary Flashcards - Hard Mode</title>
+  <title>Macbeth Act 1 Test</title>
   <style>
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -21,7 +23,7 @@
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       padding: 30px;
-      max-width: 600px;
+      max-width: 700px;
       text-align: center;
     }
 
@@ -31,6 +33,7 @@
 
     .options {
       margin-top: 20px;
+      text-align: left;
     }
 
     button.option {
@@ -78,7 +81,6 @@
     #score {
       font-size: 18px;
       margin-top: 15px;
-      color: #333;
     }
 
     #hardModeBtn {
@@ -91,10 +93,6 @@
       cursor: pointer;
     }
 
-    #hardModeBtn:hover {
-      background: #F57C00;
-    }
-
     #timer {
       margin-top: 10px;
       font-weight: bold;
@@ -103,136 +101,185 @@
   </style>
 </head>
 <body>
-  <button id="hardModeBtn" onclick="toggleHardMode()">Toggle Hard Mode</button>
-  <div class="card" id="card">
-    <h2 id="term"></h2>
-    <div class="options" id="options"></div>
-    <button id="nextBtn" onclick="nextCard()">Next</button>
-    <div id="timer"></div>
-    <div id="score"></div>
-  </div>
 
-  <script>
-    const vocab = [
-      {term: "Aside", definition: "a remark or passage by a character in a play that is intended to be heard by the audience but unheard by the other characters in the play."},
-      {term: "Soliloquy", definition: "an act of speaking one's thoughts aloud when by oneself or regardless of any hearers, especially by a character in a play."},
-      {term: "Kinsmen", definition: "a man who is one of a person's blood relations."},
-      {term: "Motif", definition: "any recurring element that has symbolic significance in a story."},
-      {term: "Pun", definition: "make a joke exploiting the different possible meanings of a word."},
-      {term: "Tragedy", definition: "a serious drama typically describing a conflict between the protagonist and a superior force (such as destiny) and having a sorrowful or disastrous conclusion that elicits pity or terror."},
-      {term: "Freewill", definition: "the power of acting without the constraint of necessity or fate; the ability to act at one's own discretion."},
-      {term: "Rebel", definition: "a person who rises in opposition or armed resistance against an established government or ruler."},
-      {term: "Rhetoric", definition: "the art of effective or persuasive speaking or writing, especially the use of figures of speech and other compositional techniques."},
-      {term: "Predetermination", definition: "the philosophy that all events of history, past, present, and future, have been already decided or are already known (by God, fate, or some other force), including human actions."}
-    ];
+<button id="hardModeBtn" onclick="toggleHardMode()">Toggle Hard Mode</button>
 
-    let current = 0;
-    let score = 0;
-    let hardMode = false;
-    let timerInterval;
+<div class="card" id="card">
+  <h2 id="question"></h2>
+  <div class="options" id="options"></div>
+  <button id="nextBtn" onclick="nextQuestion()">Next</button>
+  <div id="timer"></div>
+  <div id="score"></div>
+</div>
 
-    const termElem = document.getElementById("term");
-    const optionsElem = document.getElementById("options");
-    const nextBtn = document.getElementById("nextBtn");
-    const scoreElem = document.getElementById("score");
-    const timerElem = document.getElementById("timer");
+<script>
+const questions = [
+  // TRUE / FALSE
+  {
+    q: "1. The witches plan to meet Macbeth after a battle.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    q: "2. Macbeth immediately believes the witches’ prophecies.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    q: "3. Angus and Ross tell Macbeth he is now Thane of Cawdor.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    q: "4. Lady Macbeth is worried about the consequences of killing Duncan.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    q: "5. Lady Macbeth wishes she were more masculine so she could commit the murder herself.",
+    options: ["True", "False"],
+    answer: "True"
+  },
 
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
+  // MULTIPLE CHOICE
+  {
+    q: "6. What is the main purpose of Act 1 Scene 1?",
+    options: [
+      "To show Macbeth’s bravery",
+      "To introduce the witches and the theme of fate",
+      "To show Lady Macbeth’s ambition",
+      "To show Duncan’s kindness"
+    ],
+    answer: "To introduce the witches and the theme of fate"
+  },
+  {
+    q: "7. In Act 1 Scene 5, Lady Macbeth’s reaction to Macbeth’s letter shows she is:",
+    options: [
+      "Afraid and uncertain",
+      "Ambitious and determined",
+      "Loyal but passive",
+      "Confused"
+    ],
+    answer: "Ambitious and determined"
+  },
+  {
+    q: "8. In Act 1 Scene 7, why does Macbeth hesitate to kill Duncan?",
+    options: [
+      "He fears the guards",
+      "He loves Duncan and feels guilt",
+      "He wants Banquo’s approval",
+      "The witches told him not to"
+    ],
+    answer: "He loves Duncan and feels guilt"
+  },
 
-    function toggleHardMode() {
-      hardMode = !hardMode;
-      alert(hardMode ? "Hard Mode ON: 5 seconds per question!" : "Hard Mode OFF");
-      current = 0;
-      score = 0;
-      shuffle(vocab);
-      loadCard();
-    }
+  // ETHOS / LOGOS / PATHOS
+  {
+    q: "9. When Lady Macbeth calls Macbeth a coward to shame him, which appeal is she using?",
+    options: ["Ethos", "Logos", "Pathos"],
+    answer: "Pathos"
+  },
+  {
+    q: "10. When Macbeth lists logical reasons why killing Duncan is wrong, which appeal is this?",
+    options: ["Ethos", "Logos", "Pathos"],
+    answer: "Logos"
+  },
+  {
+    q: "11. If Lady Macbeth claims she would kill Duncan herself to prove loyalty and strength, which appeal is MOST involved?",
+    options: ["Ethos", "Logos", "Pathos"],
+    answer: "Ethos"
+  }
+];
 
-    function loadCard() {
+let current = 0;
+let score = 0;
+let hardMode = false;
+let timerInterval;
+
+const questionElem = document.getElementById("question");
+const optionsElem = document.getElementById("options");
+const nextBtn = document.getElementById("nextBtn");
+const scoreElem = document.getElementById("score");
+const timerElem = document.getElementById("timer");
+
+function toggleHardMode() {
+  hardMode = !hardMode;
+  alert(hardMode ? "Hard Mode ON (5 seconds per question)" : "Hard Mode OFF");
+  current = 0;
+  score = 0;
+  loadQuestion();
+}
+
+function loadQuestion() {
+  clearInterval(timerInterval);
+  optionsElem.innerHTML = "";
+  nextBtn.style.display = "none";
+  timerElem.textContent = "";
+
+  if (current >= questions.length) {
+    document.getElementById("card").innerHTML = `
+      <h2>Test Complete!</h2>
+      <p>Your score: <strong>${score}/${questions.length}</strong></p>
+    `;
+    return;
+  }
+
+  const q = questions[current];
+  questionElem.textContent = q.q;
+
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(btn, q.answer);
+    optionsElem.appendChild(btn);
+  });
+
+  if (hardMode) startTimer(5, q.answer);
+}
+
+function startTimer(seconds, correct) {
+  let time = seconds;
+  timerElem.textContent = `Time: ${time}s`;
+  timerInterval = setInterval(() => {
+    time--;
+    timerElem.textContent = `Time: ${time}s`;
+    if (time <= 0) {
       clearInterval(timerInterval);
-      nextBtn.style.display = "none";
-      optionsElem.innerHTML = "";
-      timerElem.textContent = "";
-
-      if (current >= vocab.length) {
-        document.getElementById("card").innerHTML = `
-          <h2>Quiz Complete!</h2>
-          <p>Your final score: <strong>${score}/${vocab.length}</strong></p>
-        `;
-        return;
-      }
-
-      const word = vocab[current];
-      termElem.textContent = word.term;
-
-      // Get 3 random wrong definitions
-      let wrongDefs = shuffle(vocab.filter(v => v.term !== word.term))
-                        .slice(0, 3)
-                        .map(v => v.definition);
-      let allOptions = shuffle([word.definition, ...wrongDefs]);
-
-      allOptions.forEach(def => {
-        const btn = document.createElement("button");
-        btn.classList.add("option");
-        btn.textContent = def;
-        btn.onclick = () => checkAnswer(btn, word.definition);
-        optionsElem.appendChild(btn);
-      });
-
-      if (hardMode) startTimer(5, word.definition);
+      revealAnswer(correct);
     }
+  }, 1000);
+}
 
-    function startTimer(seconds, correctDef) {
-      let timeLeft = seconds;
-      timerElem.textContent = `Time: ${timeLeft}s`;
+function revealAnswer(correct) {
+  document.querySelectorAll(".option").forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) btn.classList.add("correct");
+  });
+  nextBtn.style.display = "inline-block";
+}
 
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerElem.textContent = `Time: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          autoFail(correctDef);
-        }
-      }, 1000);
-    }
+function checkAnswer(button, correct) {
+  clearInterval(timerInterval);
+  document.querySelectorAll(".option").forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) btn.classList.add("correct");
+  });
 
-    function autoFail(correctDef) {
-      const buttons = document.querySelectorAll(".option");
-      buttons.forEach(b => {
-        b.disabled = true;
-        if (b.textContent === correctDef) b.classList.add("correct");
-      });
-      scoreElem.textContent = `Score: ${score}/${vocab.length}`;
-      nextBtn.style.display = "inline-block";
-    }
+  if (button.textContent === correct) score++;
+  else button.classList.add("incorrect");
 
-    function checkAnswer(button, correctDef) {
-      clearInterval(timerInterval);
-      const buttons = document.querySelectorAll(".option");
-      buttons.forEach(b => {
-        b.disabled = true;
-        if (b.textContent === correctDef) b.classList.add("correct");
-      });
+  scoreElem.textContent = `Score: ${score}/${questions.length}`;
+  nextBtn.style.display = "inline-block";
+}
 
-      if (button.textContent === correctDef) {
-        score++;
-      } else {
-        button.classList.add("incorrect");
-      }
+function nextQuestion() {
+  current++;
+  loadQuestion();
+}
 
-      scoreElem.textContent = `Score: ${score}/${vocab.length}`;
-      nextBtn.style.display = "inline-block";
-    }
+loadQuestion();
+</script>
 
-    function nextCard() {
-      current++;
-      loadCard();
-    }
-
-    shuffle(vocab);
-    loadCard();
-  </script>
 </body>
 </html>
