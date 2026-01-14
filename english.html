@@ -113,81 +113,97 @@
 </div>
 
 <script>
-const questions = [
-  // TRUE / FALSE
+const macbethQuiz = [
   {
-    q: "1. The witches plan to meet Macbeth after a battle.",
-    options: ["True", "False"],
-    answer: "True"
-  },
-  {
-    q: "2. Macbeth immediately believes the witches’ prophecies.",
+    q: "King Duncan has chosen Macbeth to be the next king.",
     options: ["True", "False"],
     answer: "False"
   },
   {
-    q: "3. Angus and Ross tell Macbeth he is now Thane of Cawdor.",
+    q: "Who helps Macbeth come up with his plan to kill the king?",
+    options: ["Banquo", "Lady Macbeth", "Macduff", "Ross"],
+    answer: "Lady Macbeth"
+  },
+  {
+    q: "What is the best theme for Act I.i?",
+    options: ["Loyalty", "Supernatural", "Violence", "None of the above"],
+    answer: "Supernatural"
+  },
+  {
+    q: "This quotation from Macbeth could be an example of ethos because Macbeth cares about his reputation.",
     options: ["True", "False"],
     answer: "True"
   },
   {
-    q: "4. Lady Macbeth is worried about the consequences of killing Duncan.",
+    q: "At least how many words did Shakespeare add to the English language?",
+    options: ["100", "300", "1000", "3000"],
+    answer: "3000"
+  },
+  {
+    q: "Why does Macbeth want to kill King Duncan? (Select all that apply)",
+    options: [
+      "Duncan is an unfair leader",
+      "Macbeth wants to be king himself",
+      "Duncan insulted Macbeth's manhood",
+      "Lady Macbeth wants him to kill King Duncan",
+      "All of the above"
+    ],
+    answer: [
+      "Macbeth wants to be king himself",
+      "Lady Macbeth wants him to kill King Duncan"
+    ]
+  },
+  {
+    q: "Lady Macbeth believes that in order to carry out the murder, she must behave more like a ____.",
+    answer: "man"
+  },
+  {
+    q: "The penalty for treason (being a traitor to the king) is life in prison.",
     options: ["True", "False"],
     answer: "False"
   },
   {
-    q: "5. Lady Macbeth wishes she were more masculine so she could commit the murder herself.",
+    q: "How many witches are there in Act I?",
+    options: ["1", "2", "4"],
+    answer: "Three"
+  },
+  {
+    q: "Although he has the ambition to become king, Macbeth verbalizes many good reasons not to kill King Duncan.",
     options: ["True", "False"],
     answer: "True"
   },
-
-  // MULTIPLE CHOICE
   {
-    q: "6. What is the main purpose of Act 1 Scene 1?",
+    q: "Macbeth purposefully keeps his plot against King Duncan from his wife.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    q: "What do the witches predict initially? (Select all that apply)",
     options: [
-      "To show Macbeth’s bravery",
-      "To introduce the witches and the theme of fate",
-      "To show Lady Macbeth’s ambition",
-      "To show Duncan’s kindness"
+      "Banquo's sons will be kings",
+      "Macbeth will be Thane of Cawdor",
+      "Macbeth's sons will be kings",
+      "Lady Macbeth will kill herself",
+      "Macbeth will be King"
     ],
-    answer: "To introduce the witches and the theme of fate"
+    answer: [
+      "Banquo's sons will be kings",
+      "Macbeth will be Thane of Cawdor",
+      "Macbeth will be King"
+    ]
   },
   {
-    q: "7. In Act 1 Scene 5, Lady Macbeth’s reaction to Macbeth’s letter shows she is:",
-    options: [
-      "Afraid and uncertain",
-      "Ambitious and determined",
-      "Loyal but passive",
-      "Confused"
-    ],
-    answer: "Ambitious and determined"
+    q: "What motif best describes the witches’ scene where they tell Macbeth’s future?",
+    options: ["Violence", "Blood", "Daggers", "Predictions"],
+    answer: "Predictions"
   },
   {
-    q: "8. In Act 1 Scene 7, why does Macbeth hesitate to kill Duncan?",
-    options: [
-      "He fears the guards",
-      "He loves Duncan and feels guilt",
-      "He wants Banquo’s approval",
-      "The witches told him not to"
-    ],
-    answer: "He loves Duncan and feels guilt"
-  },
-
-  // ETHOS / LOGOS / PATHOS
-  {
-    q: "9. When Lady Macbeth calls Macbeth a coward to shame him, which appeal is she using?",
-    options: ["Ethos", "Logos", "Pathos"],
-    answer: "Pathos"
-  },
-  {
-    q: "10. When Macbeth lists logical reasons why killing Duncan is wrong, which appeal is this?",
-    options: ["Ethos", "Logos", "Pathos"],
+    q: "After emotional threats and bullying, Lady Macbeth uses which rhetorical appeal when she presents a logical plan to kill Duncan?",
     answer: "Logos"
   },
   {
-    q: "11. If Lady Macbeth claims she would kill Duncan herself to prove loyalty and strength, which appeal is MOST involved?",
-    options: ["Ethos", "Logos", "Pathos"],
-    answer: "Ethos"
+    q: "Banquo seems to understand the witches' prophecies could lead to trouble, while ____ can think only about the promise of greatness.",
+    answer: "Macbeth"
   }
 ];
 
@@ -283,3 +299,4 @@ loadQuestion();
 
 </body>
 </html>
+
