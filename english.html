@@ -1,337 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macbeth Test</title>
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f4f6f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 30px;
-      max-width: 700px;
-      text-align: center;
-    }
-
-    h2 {
-      color: #333;
-    }
-
-    .options {
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    button.option {
-      display: block;
-      width: 100%;
-      background: #eee;
-      border: none;
-      border-radius: 6px;
-      padding: 12px;
-      margin: 8px 0;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button.option:hover {
-      background: #ddd;
-    }
-
-    .correct {
-      background: #4CAF50 !important;
-      color: white;
-    }
-
-    .incorrect {
-      background: #f44336 !important;
-      color: white;
-    }
-
-    #nextBtn {
-      margin-top: 20px;
-      display: none;
-      background: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    #nextBtn:hover {
-      background: #1976D2;
-    }
-
-    #score {
-      font-size: 18px;
-      margin-top: 15px;
-    }
-
-    #hardModeBtn {
-      margin-bottom: 20px;
-      background: #FF9800;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    #timer {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #d32f2f;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Macbeth Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  #prompt { font-size: 18px; margin-bottom: 10px; }
+  #question { font-size: 28px; margin: 20px 0; }
+  .choice {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  .choice:hover { background: #f0f0f0; }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+</style>
 </head>
 <body>
 
-<button id="hardModeBtn" onclick="toggleHardMode()">Toggle Hard Mode</button>
+<h1>Macbeth Quiz</h1>
 
-<div class="card" id="card">
-  <h2 id="question"></h2>
-  <div class="options" id="options"></div>
-  <button id="nextBtn" onclick="nextQuestion()">Next</button>
-  <div id="timer"></div>
-  <div id="score"></div>
-</div>
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
 
 <script>
-const macbethQuiz = [
-  {
-    q: "Why is the Porter scene included in Macbeth?",
-    options: [
-      "To provide comic relief and lower the tension",
-      "To introduce a new villain",
-      "To explain Macbeth’s childhood",
-      "To reveal Banquo’s prophecy"
-    ],
-    answer: "To provide comic relief and lower the tension"
-  },
-  {
-    q: "What does the first apparition tell Macbeth?",
-    options: ["Beware Macduff", "Beware Banquo", "Beware Malcolm", "Beware Fleance"],
-    answer: "Beware Macduff"
-  },
-  {
-    q: "What does the second apparition tell Macbeth?",
-    options: [
-      "Birnam Wood will march to Dunsinane",
-      "Macbeth will be king forever",
-      "Banquo’s sons will die",
-      "Macduff is already dead"
-    ],
-    answer: "Birnam Wood will march to Dunsinane"
-  },
-  {
-    q: "What does the third apparition tell Macbeth?",
-    options: [
-      "No one born of a woman will harm him",
-      "He will die in battle",
-      "Macduff is coming for him",
-      "He will lose the throne"
-    ],
-    answer: "No one born of a woman will harm him"
-  },
-  {
-    q: "Where did Macduff go?",
-    options: ["England", "Ireland", "Scotland", "France"],
-    answer: "England"
-  },
-  {
-    q: "Who did Macduff visit in England?",
-    options: ["Malcolm", "Banquo", "Ross", "Fleance"],
-    answer: "Malcolm"
-  },
-  {
-    q: "What does Macbeth hallucinate at his coronation banquet?",
-    options: ["The ghost of Banquo", "A floating dagger", "Blood on his hands", "The witches"],
-    answer: "The ghost of Banquo"
-  },
-  {
-    q: "Who says 'Here's the smell of blood still; all the perfumes of Arabia will not sweeten this little hand'?",
-    options: ["Lady Macbeth", "Macbeth", "Lady Macduff", "The Porter"],
-    answer: "Lady Macbeth"
-  },
-  {
-    q: "Lady Macbeth says she would have killed Duncan, but he looked too much like her what?",
-    options: ["Father", "Brother", "Son", "Husband"],
-    answer: "Father"
-  },
-  {
-    q: "Does the motif of nature appear when Malcolm tells his army to camouflage with branches?",
-    options: ["Yes", "No"],
-    answer: "Yes"
-  },
-  {
-    q: "Who escapes from the murderers?",
-    options: ["Fleance", "Banquo", "Macduff", "Malcolm"],
-    answer: "Fleance"
-  },
-  {
-    q: "Who was 'untimely ripped' from their mother?",
-    options: ["Macduff", "Macbeth", "Banquo", "Malcolm"],
-    answer: "Macduff"
-  },
-  {
-    q: "Who witnesses Lady Macbeth sleepwalking?",
-    options: ["A gentlewoman and a doctor", "Macbeth and Banquo", "Ross and Lennox", "The witches"],
-    answer: "A gentlewoman and a doctor"
-  },
-  {
-    q: "Were Lady Macduff and her children killed because of Macbeth?",
-    options: ["Yes", "No"],
-    answer: "Yes"
-  },
-  {
-    q: "Who tells Macduff that his family has been killed?",
-    options: ["Ross", "Malcolm", "Macbeth", "Lennox"],
-    answer: "Ross"
-  },
-  {
-    q: "Which ingredient is NOT in the witches' brew?",
-    options: [
-      "Lady Macbeth’s hair",
-      "Dragon scales",
-      "Finger of a baby",
-      "Baboon blood"
-    ],
-    answer: "Lady Macbeth’s hair"
-  },
-  {
-    q: "What excuse does Macbeth give for his strange behavior at the banquet?",
-    options: [
-      "He has struggled with mental illness since childhood",
-      "He is drunk",
-      "He is tired",
-      "He is angry at Banquo"
-    ],
-    answer: "He has struggled with mental illness since childhood"
-  },
-  {
-    q: "Where does Donalbain flee after Duncan’s murder?",
-    options: ["Ireland", "England", "France", "Wales"],
-    answer: "Ireland"
-  },
-  {
-    q: "Lady Macbeth wishes she were what so she could kill Duncan herself?",
-    options: ["A man", "A witch", "A queen", "A soldier"],
-    answer: "A man"
-  },
-  {
-    q: "Who discovers King Duncan’s body?",
-    options: ["Macduff", "Macbeth", "Banquo", "Lennox"],
-    answer: "Macduff"
-  },
-  {
-    q: "Who kills Macbeth?",
-    options: ["Macduff", "Malcolm", "Banquo", "Fleance"],
-    answer: "Macduff"
-  }
+// ----------------------
+// Macbeth Questions
+// ----------------------
+const otherQuestions = [
+  { prompt:"Choose the correct answer", q:"Why is the Porter scene included in Macbeth?", a:"To provide comic relief and lower the tension",
+    choices:["To provide comic relief and lower the tension","To introduce a new villain","To explain Macbeth’s childhood","To reveal Banquo’s prophecy"] },
+
+  { prompt:"Choose the correct answer", q:"What does the first apparition tell Macbeth?", a:"Beware Macduff",
+    choices:["Beware Macduff","Beware Banquo","Beware Malcolm","Beware Fleance"] },
+
+  { prompt:"Choose the correct answer", q:"What does the second apparition tell Macbeth?", a:"Birnam Wood will march to Dunsinane",
+    choices:["Birnam Wood will march to Dunsinane","Macbeth will be king forever","Banquo’s sons will die","Macduff is already dead"] },
+
+  { prompt:"Choose the correct answer", q:"What does the third apparition tell Macbeth?", a:"No one born of a woman will harm him",
+    choices:["No one born of a woman will harm him","He will die in battle","Macduff is coming for him","He will lose the throne"] },
+
+  { prompt:"Choose the correct answer", q:"Where did Macduff go?", a:"England",
+    choices:["England","Ireland","Scotland","France"] },
+
+  { prompt:"Choose the correct answer", q:"Who did Macduff visit in England?", a:"Malcolm",
+    choices:["Malcolm","Banquo","Ross","Fleance"] },
+
+  { prompt:"Choose the correct answer", q:"What does Macbeth hallucinate at his coronation banquet?", a:"The ghost of Banquo",
+    choices:["The ghost of Banquo","A floating dagger","Blood on his hands","The witches"] },
+
+  { prompt:"Choose the correct answer", q:"Who says 'Here's the smell of blood still; all the perfumes of Arabia will not sweeten this little hand'?", a:"Lady Macbeth",
+    choices:["Lady Macbeth","Macbeth","Lady Macduff","The Porter"] },
+
+  { prompt:"Choose the correct answer", q:"Lady Macbeth says she would have killed Duncan, but he looked too much like her what?", a:"Father",
+    choices:["Father","Brother","Son","Husband"] },
+
+  { prompt:"Choose the correct answer", q:"Does the motif of nature appear when Malcolm tells his army to camouflage with branches?", a:"Yes",
+    choices:["Yes","No"] },
+
+  { prompt:"Choose the correct answer", q:"Who escapes from the murderers?", a:"Fleance",
+    choices:["Fleance","Banquo","Macduff","Malcolm"] },
+
+  { prompt:"Choose the correct answer", q:"Who was 'untimely ripped' from their mother?", a:"Macduff",
+    choices:["Macduff","Macbeth","Banquo","Malcolm"] },
+
+  { prompt:"Choose the correct answer", q:"Who witnesses Lady Macbeth sleepwalking?", a:"A gentlewoman and a doctor",
+    choices:["A gentlewoman and a doctor","Macbeth and Banquo","Ross and Lennox","The witches"] },
+
+  { prompt:"Choose the correct answer", q:"Were Lady Macduff and her children killed because of Macbeth?", a:"Yes",
+    choices:["Yes","No"] },
+
+  { prompt:"Choose the correct answer", q:"Who tells Macduff that his family has been killed?", a:"Ross",
+    choices:["Ross","Malcolm","Macbeth","Lennox"] },
+
+  { prompt:"Choose the correct answer", q:"Which ingredient is NOT in the witches' brew?", a:"Lady Macbeth’s hair",
+    choices:["Lady Macbeth’s hair","Dragon scales","Finger of a baby","Baboon blood"] },
+
+  { prompt:"Choose the correct answer", q:"What excuse does Macbeth give for his strange behavior at the banquet?", a:"He has struggled with mental illness since childhood",
+    choices:["He has struggled with mental illness since childhood","He is drunk","He is tired","He is angry at Banquo"] },
+
+  { prompt:"Choose the correct answer", q:"Where does Donalbain flee after Duncan’s murder?", a:"Ireland",
+    choices:["Ireland","England","France","Wales"] },
+
+  { prompt:"Choose the correct answer", q:"Lady Macbeth wishes she were what so she could kill Duncan herself?", a:"A man",
+    choices:["A man","A witch","A queen","A soldier"] },
+
+  { prompt:"Choose the correct answer", q:"Who discovers King Duncan’s body?", a:"Macduff",
+    choices:["Macduff","Macbeth","Banquo","Lennox"] },
+
+  { prompt:"Choose the correct answer", q:"Who kills Macbeth?", a:"Macduff",
+    choices:["Macduff","Malcolm","Banquo","Fleance"] }
 ];
 
-let current = 0;
+// ----------------------
+// Quiz Logic
+// ----------------------
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+const quiz = shuffle(otherQuestions);
+
+let index = 0;
 let score = 0;
-let hardMode = false;
-let timerInterval;
+let answered = false;
 
-const questionElem = document.getElementById("question");
-const optionsElem = document.getElementById("options");
-const nextBtn = document.getElementById("nextBtn");
-const scoreElem = document.getElementById("score");
-const timerElem = document.getElementById("timer");
+function load() {
+  answered = false;
+  const item = quiz[index];
 
-function toggleHardMode() {
-  hardMode = !hardMode;
-  alert(hardMode ? "Hard Mode ON (5 seconds per question)" : "Hard Mode OFF");
-  current = 0;
-  score = 0;
-  loadQuestion();
+  document.getElementById("prompt").textContent = item.prompt;
+  document.getElementById("question").textContent = item.q;
+  document.getElementById("progress").textContent = `Question ${index+1} of ${quiz.length}`;
+
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
+
+  const choices = shuffle(item.choices.slice());
+
+  choices.forEach(c => {
+    const el = document.createElement("div");
+    el.className = "choice";
+    el.textContent = c;
+    el.onclick = () => select(c, el, item.a);
+    div.appendChild(el);
+  });
 }
 
-function loadQuestion() {
-  clearInterval(timerInterval);
-  optionsElem.innerHTML = "";
-  nextBtn.style.display = "none";
-  timerElem.textContent = "";
+function select(choice, el, correctAnswer) {
+  if (answered) return;
+  answered = true;
 
-  if (current >= macbethQuiz.length) {
-    document.getElementById("card").innerHTML = `
-      <h2>Test Complete!</h2>
-      <p>Your score: <strong>${score}/${macbethQuiz.length}</strong></p>
-    `;
-    return;
+  if (choice === correctAnswer) {
+    score++;
+    el.style.background = "#c8f7c5";
+  } else {
+    el.style.background = "#f7c5c5";
+    const div = document.getElementById("choices");
+    Array.from(div.children).forEach(child => {
+      if (child.textContent === correctAnswer) {
+        child.style.background = "#c8f7c5";
+        child.style.fontWeight = "bold";
+      }
+    });
   }
-
-  const q = macbethQuiz[current];
-  questionElem.textContent = q.q;
-
-  q.options.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.className = "option";
-    btn.textContent = opt;
-    btn.onclick = () => checkAnswer(btn, q.answer);
-    optionsElem.appendChild(btn);
-  });
-
-  if (hardMode) startTimer(5, q.answer);
-}
-
-function startTimer(seconds, correct) {
-  let time = seconds;
-  timerElem.textContent = `Time: ${time}s`;
-  timerInterval = setInterval(() => {
-    time--;
-    timerElem.textContent = `Time: ${time}s`;
-    if (time <= 0) {
-      clearInterval(timerInterval);
-      revealAnswer(correct);
-    }
-  }, 1000);
-}
-
-function revealAnswer(correct) {
-  document.querySelectorAll(".option").forEach(btn => {
-    btn.disabled = true;
-    if (btn.textContent === correct) btn.classList.add("correct");
-  });
-  nextBtn.style.display = "inline-block";
-}
-
-function checkAnswer(button, correct) {
-  clearInterval(timerInterval);
-  document.querySelectorAll(".option").forEach(btn => {
-    btn.disabled = true;
-    if (btn.textContent === correct) btn.classList.add("correct");
-  });
-
-  if (button.textContent === correct) score++;
-  else button.classList.add("incorrect");
-
-  scoreElem.textContent = `Score: ${score}/${macbethQuiz.length}`;
-  nextBtn.style.display = "inline-block";
 }
 
 function nextQuestion() {
-  current++;
-  loadQuestion();
+  if (!answered) return;
+  index++;
+  if (index < quiz.length) {
+    load();
+  } else {
+    document.body.innerHTML = `<h1>Quiz Complete</h1><h2>Your Score: ${score} / ${quiz.length}</h2>`;
+  }
 }
 
-loadQuestion();
+load();
 </script>
 
 </body>
