@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macbeth Act 1 Test</title>
+  <title>Macbeth Test</title>
   <style>
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -113,7 +111,7 @@
 </div>
 
 <script>
-const questions = [
+const macbethQuiz = [
   {
     q: "Why is the Porter scene included in Macbeth?",
     options: [
@@ -246,7 +244,6 @@ const questions = [
   }
 ];
 
-
 let current = 0;
 let score = 0;
 let hardMode = false;
@@ -272,15 +269,15 @@ function loadQuestion() {
   nextBtn.style.display = "none";
   timerElem.textContent = "";
 
-  if (current >= questions.length) {
+  if (current >= macbethQuiz.length) {
     document.getElementById("card").innerHTML = `
       <h2>Test Complete!</h2>
-      <p>Your score: <strong>${score}/${questions.length}</strong></p>
+      <p>Your score: <strong>${score}/${macbethQuiz.length}</strong></p>
     `;
     return;
   }
 
-  const q = questions[current];
+  const q = macbethQuiz[current];
   questionElem.textContent = q.q;
 
   q.options.forEach(opt => {
@@ -325,7 +322,7 @@ function checkAnswer(button, correct) {
   if (button.textContent === correct) score++;
   else button.classList.add("incorrect");
 
-  scoreElem.textContent = `Score: ${score}/${questions.length}`;
+  scoreElem.textContent = `Score: ${score}/${macbethQuiz.length}`;
   nextBtn.style.display = "inline-block";
 }
 
@@ -339,6 +336,3 @@ loadQuestion();
 
 </body>
 </html>
-
-
-
