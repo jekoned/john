@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENGLISH SBAC Quiz tht i made at 12AM ):</title>
+  <title>English SBAC Vocab Quiz</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,13 +19,14 @@
 
     .question {
       font-size: 18px;
+      margin-top: 20px;
     }
 
     .button {
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      margin: 10px;
+      margin: 15px;
     }
 
     .feedback {
@@ -34,17 +36,17 @@
 
     .option-button {
       display: inline-block;
-      padding: 15px;
-      width: 200px;
-      margin: 10px;
+      padding: 12px;
+      width: 260px;
+      margin: 8px;
       cursor: pointer;
       background-color: #ddd;
       border: 1px solid #ccc;
       text-align: center;
     }
 
-    .option-button:disabled {
-      background-color: #eee;
+    .option-button:hover {
+      background-color: #ccc;
     }
 
     .correct {
@@ -59,143 +61,150 @@
       margin: 15px 0;
     }
 
-    #next-button {
+    #nextButton {
       display: none;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>Chinese Character Quiz</h1>
+  <h1>English SBAC Vocab Quiz</h1>
 
   <label class="hard-mode-checkbox">
     <input type="checkbox" id="hardModeCheckbox"> Hard Mode (8 options)
   </label>
 
-  <div id="character" style="font-size: 36px;"></div>
+  <div id="wordDisplay" style="font-size: 40px; font-weight: bold;"></div>
 
-<div class="question" id="meaningQuestion">What is the meaning of this word?</div>
-  <div id="meaningOptions" class="options-container"></div>
+  <div class="question">What is the meaning of this word?</div>
+  <div id="meaningOptions"></div>
   <div id="meaningFeedback" class="feedback"></div>
 
+  <button id="nextButton" class="button" onclick="nextQuestion()">Next Word</button>
 
-  <button id="nextButton" class="button" onclick="nextQuestion()">Next Character</button>
+<script>
+const wordBank = [
+  {"word": "Alarmist", "definition": "Exaggerating danger or negative outcomes"},
+  {"word": "Ambiguous", "definition": "Open to more than one interpretation; unclear"},
+  {"word": "Analytical", "definition": "Examining details carefully and systematically"},
+  {"word": "Arbitrary", "definition": "Based on random choice rather than reason"},
+  {"word": "Balanced", "definition": "Considering multiple viewpoints fairly"},
+  {"word": "Biased", "definition": "Showing prejudice for or against something"},
+  {"word": "Candid", "definition": "Honest and direct"},
+  {"word": "Complacent", "definition": "Self-satisfied; unaware of possible danger"},
+  {"word": "Concise", "definition": "Brief and clearly expressed"},
+  {"word": "Credible", "definition": "Believable; trustworthy"},
+  {"word": "Dogmatic", "definition": "Stating opinions as unquestionably true"},
+  {"word": "Evasive", "definition": "Avoiding direct answers"},
+  {"word": "Impulsive", "definition": "Acting without careful thought"},
+  {"word": "Inconclusive", "definition": "Not leading to a firm conclusion"},
+  {"word": "Indifferent", "definition": "Lacking interest or concern"},
+  {"word": "Nuanced", "definition": "Showing subtle differences"},
+  {"word": "Objective", "definition": "Not influenced by personal feelings"},
+  {"word": "Questionable", "definition": "Doubtful or open to challenge"},
+  {"word": "Resilient", "definition": "Able to recover quickly"},
+  {"word": "Resolute", "definition": "Firmly determined"},
+  {"word": "Speculative", "definition": "Based on guesswork"},
+  {"word": "Substantiated", "definition": "Supported with evidence"},
+  {"word": "Tenacious", "definition": "Persistent; not giving up"},
+  {"word": "Transparent", "definition": "Open and easy to understand"},
+  {"word": "Unsubstantiated", "definition": "Not supported with evidence"}
+];
 
-  <script>
-  const wordBank = [
-    {"word": "Alarmist", "definition": "Exaggerating danger or negative outcomes"},
-    {"word": "Ambiguous", "definition": "Open to more than one interpretation; unclear"},
-    {"word": "Analytical", "definition": "Examining details carefully and systematically"},
-    {"word": "Arbitrary", "definition": "Based on random choice rather than reason"},
-    {"word": "Balanced", "definition": "Considering multiple viewpoints fairly"},
-    {"word": "Biased", "definition": "Showing prejudice for or against something"},
-    {"word": "Candid", "definition": "Honest and direct"},
-    {"word": "Complacent", "definition": "Self-satisfied; unaware of possible danger"},
-    {"word": "Concise", "definition": "Brief and clearly expressed"},
-    {"word": "Credible", "definition": "Believable; trustworthy"},
-    {"word": "Dogmatic", "definition": "Stating opinions as unquestionably true"},
-    {"word": "Evasive", "definition": "Avoiding direct answers"},
-    {"word": "Impulsive", "definition": "Acting without careful thought"},
-    {"word": "Inconclusive", "definition": "Not leading to a firm conclusion"},
-    {"word": "Indifferent", "definition": "Lacking interest or concern"},
-    {"word": "Nuanced", "definition": "Showing subtle differences"},
-    {"word": "Objective", "definition": "Not influenced by personal feelings"},
-    {"word": "Questionable", "definition": "Doubtful or open to challenge"},
-    {"word": "Resilient", "definition": "Able to recover quickly"},
-    {"word": "Resolute", "definition": "Firmly determined"},
-    {"word": "Speculative", "definition": "Based on guesswork"},
-    {"word": "Substantiated", "definition": "Supported with evidence"},
-    {"word": "Tenacious", "definition": "Persistent; not giving up"},
-    {"word": "Transparent", "definition": "Open and easy to understand"},
-    {"word": "Unsubstantiated", "definition": "Not supported with evidence"},
-  ];
+let remainingWords = [];
+let currentWord = {};
+let correctDefinition = "";
+let hardMode = false;
 
-  let remainingWords = [...wordBank];
-  let currentWord = {};
-  let correctDefinition = "";
-  let answered = false;
-  let hardMode = false;
+document.getElementById('hardModeCheckbox')
+  .addEventListener('change', toggleHardMode);
 
-  document.getElementById('hardModeCheckbox').addEventListener('change', toggleHardMode);
-
-  function toggleHardMode() {
-    hardMode = document.getElementById('hardModeCheckbox').checked;
-    nextQuestion();
-  }
-
-  function nextQuestion() {
-    if (remainingWords.length === 0) {
-      remainingWords = [...wordBank];
-      shuffle(remainingWords);
-    }
-
-    answered = false;
-    document.getElementById('meaningFeedback').textContent = '';
-    document.getElementById('nextButton').style.display = 'none';
-
-    currentWord = remainingWords.pop();
-    correctDefinition = currentWord.definition;
-
-    document.getElementById('character').textContent = currentWord.word;
-    document.getElementById('pinyinQuestion').style.display = 'none';
-    document.getElementById('pinyinOptions').style.display = 'none';
-    document.getElementById('pinyinFeedback').style.display = 'none';
-
-    setupOptions();
-  }
-
-  function setupOptions() {
-    const optionCount = hardMode ? 8 : 4;
-
-    const wrongDefinitions = randomSample(
-      wordBank.filter(word => word.definition !== correctDefinition).map(w => w.definition),
-      optionCount - 1
-    );
-
-    const options = [...wrongDefinitions, correctDefinition];
-    shuffle(options);
-
-    const container = document.getElementById('meaningOptions');
-    container.innerHTML = '';
-
-    options.forEach((option, index) => {
-      const button = document.createElement('button');
-      button.textContent = option;
-      button.className = 'option-button';
-      button.onclick = () => checkAnswer(option);
-      container.appendChild(button);
-    });
-  }
-
-  function checkAnswer(selected) {
-    const feedback = document.getElementById('meaningFeedback');
-
-    if (selected === correctDefinition) {
-      feedback.textContent = '✅ Correct!';
-      feedback.className = 'feedback correct';
-    } else {
-      feedback.textContent = `❌ Correct answer: ${correctDefinition}`;
-      feedback.className = 'feedback incorrect';
-    }
-
-    answered = true;
-    document.getElementById('nextButton').style.display = 'inline-block';
-  }
-
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
-
-  function randomSample(array, size) {
-    const shuffled = [...array];
-    shuffle(shuffled);
-    return shuffled.slice(0, size);
-  }
-
+function toggleHardMode() {
+  hardMode = document.getElementById('hardModeCheckbox').checked;
+  resetDeck();
   nextQuestion();
+}
+
+function resetDeck() {
+  remainingWords = [...wordBank];
+  shuffle(remainingWords);
+}
+
+function nextQuestion() {
+
+  if (remainingWords.length === 0) {
+    resetDeck();
+  }
+
+  document.getElementById('meaningFeedback').textContent = '';
+  document.getElementById('meaningFeedback').className = 'feedback';
+  document.getElementById('nextButton').style.display = 'none';
+
+  currentWord = remainingWords.pop();
+  correctDefinition = currentWord.definition;
+
+  document.getElementById('wordDisplay').textContent = currentWord.word;
+
+  setupOptions();
+}
+
+function setupOptions() {
+
+  const optionCount = hardMode ? 8 : 4;
+
+  const wrongDefinitions = randomSample(
+    wordBank
+      .filter(w => w.definition !== correctDefinition)
+      .map(w => w.definition),
+    optionCount - 1
+  );
+
+  const options = [...wrongDefinitions, correctDefinition];
+  shuffle(options);
+
+  const container = document.getElementById('meaningOptions');
+  container.innerHTML = '';
+
+  options.forEach(option => {
+    const button = document.createElement('button');
+    button.textContent = option;
+    button.className = 'option-button';
+    button.onclick = () => checkAnswer(option);
+    container.appendChild(button);
+  });
+}
+
+function checkAnswer(selected) {
+
+  const feedback = document.getElementById('meaningFeedback');
+
+  if (selected === correctDefinition) {
+    feedback.textContent = "✅ Correct!";
+    feedback.className = "feedback correct";
+  } else {
+    feedback.textContent = "❌ Correct answer: " + correctDefinition;
+    feedback.className = "feedback incorrect";
+  }
+
+  document.getElementById('nextButton').style.display = 'inline-block';
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function randomSample(array, size) {
+  const copy = [...array];
+  shuffle(copy);
+  return copy.slice(0, size);
+}
+
+resetDeck();
+nextQuestion();
 </script>
 
 </body>
