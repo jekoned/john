@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Physics Full Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  #prompt { font-size: 18px; margin-bottom: 10px; }
+  #question { font-size: 22px; margin: 20px 0; }
+  .choice {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .choice:hover { background: #f0f0f0; }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Physics Quiz</h1>
+
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
+
+<script>
+
+const quiz = [
+
+{ prompt:"Do electric fields point TOWARDS or AWAY from positive source charges?", q:"", a:"Away", choices:["Towards","Away"] },
+
+{ prompt:"What happens to electric field strength as distance increases?", q:"", a:"It decreases", choices:["It increases","It decreases","It stays the same"] },
+
+{ prompt:"What is the difference between an insulator and a conductor?", q:"", a:"Conductors allow charges to move freely", choices:["Conductors allow charges to move freely","Insulators allow charges to move freely"] },
+
+{ prompt:"How do we know if a voltage exists between two points?", q:"", a:"There is a potential energy difference", choices:["There is a potential energy difference","The charges disappear","The field stops"] },
+
+{ prompt:"What is a capacitor?", q:"", a:"Two plates that store electric charge", choices:["Two plates that store electric charge","A moving magnet","A type of battery"] },
+
+{ prompt:"If plate size increases, charge capacity...", q:"", a:"Increases", choices:["Increases","Decreases","Stays the same"] },
+
+{ prompt:"If distance between plates increases, charge capacity...", q:"", a:"Decreases", choices:["Increases","Decreases","Stays the same"] },
+
+{ prompt:"All magnets are dipoles means:", q:"", a:"They have both a north and south pole", choices:["They have both a north and south pole","They have only one pole"] },
+
+{ prompt:"If you split a magnet in half:", q:"", a:"You get two smaller dipoles", choices:["You get two smaller dipoles","You isolate a single pole"] },
+
+{ prompt:"Magnetic fields point ____ magnetic north poles.", q:"", a:"Away from", choices:["Towards","Away from"] },
+
+{ prompt:"Charges attract or repel based on:", q:"", a:"Opposites attract, likes repel", choices:["Opposites attract, likes repel","Likes attract, opposites repel"] },
+
+{ prompt:"Magnets attract or repel based on:", q:"", a:"Opposite poles attract, like poles repel", choices:["Opposite poles attract, like poles repel","Like poles attract"] },
+
+{ prompt:"A transverse wave:", q:"", a:"Oscillates perpendicular to motion", choices:["Oscillates perpendicular to motion","Oscillates parallel to motion"] },
+
+{ prompt:"A longitudinal wave:", q:"", a:"Oscillates parallel to motion", choices:["Oscillates perpendicular to motion","Oscillates parallel to motion"] },
+
+{ prompt:"Gravitational force units:", q:"", a:"Newtons (N)", choices:["Newtons (N)","Joules (J)","Volts (V)"] },
+
+{ prompt:"Electric force units:", q:"", a:"Newtons (N)", choices:["Newtons (N)","Coulombs (C)","Volts (V)"] },
+
+{ prompt:"Potential energy units:", q:"", a:"Joules (J)", choices:["Joules (J)","Newtons (N)","Volts (V)"] },
+
+{ prompt:"The equation mg gives:", q:"", a:"Gravitational force (weight)", choices:["Gravitational force (weight)","Electric field","Voltage"] },
+
+{ prompt:"The equation qE gives:", q:"", a:"Electric force", choices:["Electric force","Electric potential","Mass"] },
+
+{ prompt:"Gravitational potential units:", q:"", a:"Joules per kilogram (J/kg)", choices:["Joules per kilogram (J/kg)","Volts (V)","Newtons (N)"] },
+
+{ prompt:"Electric potential units:", q:"", a:"Volts (V)", choices:["Volts (V)","Joules (J)","Newtons (N)"] }
+
+];
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+shuffle(quiz);
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+function load() {
+  answered = false;
+  const item = quiz[index];
+  document.getElementById("prompt").textContent = item.prompt;
+  document.getElementById("question").textContent = item.q;
+  document.getElementById("progress").textContent = `Question ${index+1} of ${quiz.length}`;
+
+  const choices = shuffle(item.choices.slice());
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
+
+  choices.forEach(c => {
+    const el = document.createElement("div");
+    el.className = "choice";
+    el.textContent = c;
+    el.onclick = () => select(c, el, item.a);
+    div.appendChild(el);
+  });
+}
+
+function select(choice, el, correctAnswer) {
+  if (answered) return;
+  answered = true;
+
+  if (choice === correctAnswer) {
+    score++;
+    el.style.background = "#c8f7c5";
+  } else {
+    el.style.background = "#f7c5c5";
+    const div = document.getElementById("choices");
+    Array.from(div.children).forEach(child => {
+      if (child.textContent === correctAnswer) {
+        child.style.background = "#c8f7c5";
+        child.style.fontWeight = "bold";
+      }
+    });
+  }
+}
+
+function nextQuestion() {
+  if (!answered) return;
+  index++;
+  if (index < quiz.length) {
+    load();
+  } else {
+    document.body.innerHTML = `<h1>Quiz Complete</h1><h2>Your Score: ${score} / ${quiz.length}</h2>`;
+  }
+}
+
+load();
+
+</script>
+
+</body>
+</html>
