@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Macbeth Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  #prompt { font-size: 18px; margin-bottom: 10px; }
+  #question { font-size: 28px; margin: 20px 0; }
+  .choice {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  .choice:hover { background: #f0f0f0; }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Mandarin Quiz</h1>
+
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
+
+<script>
+// ----------------------
+// Macbeth Questions
+// ----------------------
+const buddhismQuestions = [
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Who founded Buddhism?", 
+    a: "Siddhartha Gautama",
+    choices: ["Confucius","Laozi","Siddhartha Gautama","Ashoka"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Through which trade route did Buddhism spread to China?", 
+    a: "The Silk Road",
+    choices: ["The Silk Road","The Grand Canal","The Yellow River","The Himalayas"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Which of the following is NOT one of the Four Sights?", 
+    a: "A king",
+    choices: ["An old man","A sick person","A corpse","A king"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Which Chinese philosophy influenced the emphasis on filial piety in Buddhism?", 
+    a: "Confucianism",
+    choices: ["Confucianism","Daoism","Legalism","Mahayana"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Which Chinese philosophy influenced the integration of Chan (Zen) meditation?", 
+    a: "Daoism",
+    choices: ["Confucianism","Daoism","Legalism","Theravada"] 
+  },
+
+  { 
+    prompt: "Fill in the blank", 
+    q: "The First Noble Truth states that life is ____ while the Second Noble Truth identifies the cause as ____.", 
+    a: "suffering, craving",
+    choices: ["happiness, desire","suffering, craving","ignorance, karma","attachment, ego"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "The Fourth Noble Truth teaches that the path to end suffering is called what?", 
+    a: "The Noble Eightfold Path",
+    choices: ["The Four Sights","The Ten Precepts","The Noble Eightfold Path","The Five Precepts"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "The doctrine of no-self (anatta) teaches that:", 
+    a: "There is no permanent self or soul",
+    choices: ["There is no permanent self or soul","The soul is eternal","The self is more important than others","Anger is inevitable"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "What is the primary focus of Theravada Buddhist ethics?", 
+    a: "Following the Eightfold Path",
+    choices: ["Accumulating wealth","Following the Eightfold Path","Spreading religion to others","Building a strong army"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Which of the following is one of the Five Precepts?", 
+    a: "No killing",
+    choices: ["No killing","Meditation daily","Worship the king","Attend temple every day"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "A Theravada Buddhist tempted to lie would be guided by which precept?", 
+    a: "No lying",
+    choices: ["No stealing","No lying","No killing","No intoxicants"] 
+  },
+
+  { 
+    prompt: "True/False", 
+    q: "Mahayana Buddhism emphasizes the individual’s path to enlightenment over helping others.", 
+    a: "False",
+    choices: ["True","False"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "A bodhisattva in Mahayana Buddhism is:", 
+    a: "Someone who delays their own enlightenment to help others", 
+    choices: ["Someone who delays their own enlightenment to help others","A teacher of Theravada Buddhism","A monk who lives alone","A deity"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Mahayana ethics emphasize:", 
+    a: "Compassion and selflessness",
+    choices: ["Compassion and selflessness","Accumulating wealth","Anger management","Filial obedience only"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Buddhists believe that after death, rebirth occurs:", 
+    a: "Without a permanent self, like a flame lighting another flame",
+    choices: ["With the same permanent soul","Without a permanent self, like a flame lighting another flame","Into the same body","Only for monks"] 
+  }
+];
+// ----------------------
+// Quiz Logic
+// ----------------------
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+const quiz = shuffle(otherQuestions);
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+function load() {
+  answered = false;
+  const item = quiz[index];
+
+  document.getElementById("prompt").textContent = item.prompt;
+  document.getElementById("question").textContent = item.q;
+  document.getElementById("progress").textContent = `Question ${index+1} of ${quiz.length}`;
+
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
+
+  const choices = shuffle(item.choices.slice());
+
+  choices.forEach(c => {
+    const el = document.createElement("div");
+    el.className = "choice";
+    el.textContent = c;
+    el.onclick = () => select(c, el, item.a);
+    div.appendChild(el);
+  });
+}
+
+function select(choice, el, correctAnswer) {
+  if (answered) return;
+  answered = true;
+
+  if (choice === correctAnswer) {
+    score++;
+    el.style.background = "#c8f7c5";
+  } else {
+    el.style.background = "#f7c5c5";
+    const div = document.getElementById("choices");
+    Array.from(div.children).forEach(child => {
+      if (child.textContent === correctAnswer) {
+        child.style.background = "#c8f7c5";
+        child.style.fontWeight = "bold";
+      }
+    });
+  }
+}
+
+function nextQuestion() {
+  if (!answered) return;
+  index++;
+  if (index < quiz.length) {
+    load();
+  } else {
+    document.body.innerHTML = `<h1>Quiz Complete</h1><h2>Your Score: ${score} / ${quiz.length}</h2>`;
+  }
+}
+
+load();
+</script>
+
+</body>
+</html>
