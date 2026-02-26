@@ -44,12 +44,62 @@
 // Macbeth Questions
 // ----------------------
 const buddhismQuestions = [
+
+  // ----------------------
+  // Topic 1: Founder
+  // ----------------------
+
   { 
     prompt: "Choose the correct answer", 
     q: "Who founded Buddhism?", 
     a: "Siddhartha Gautama",
     choices: ["Confucius","Laozi","Siddhartha Gautama","Ashoka"] 
   },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Which of the following were the Four Sights that led Siddhartha to seek enlightenment?", 
+    a: "An old man, a sick person, a corpse, and a holy man",
+    choices: [
+      "An old man, a sick person, a corpse, and a holy man",
+      "A king, a soldier, a monk, and a farmer",
+      "A rich man, a poor man, a child, and a queen",
+      "A temple, a book, a priest, and a statue"
+    ] 
+  },
+
+  // Four Sight Identification (Extra)
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Siddhartha sees a weak, wrinkled man struggling to walk. Which of the Four Sights is this?", 
+    a: "Old age",
+    choices: ["Old age","Sickness","Death","Holy man"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Siddhartha sees someone suffering from disease and pain. Which of the Four Sights is this?", 
+    a: "Sickness",
+    choices: ["Old age","Sickness","Death","Holy man"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Siddhartha sees a lifeless body being carried away. Which of the Four Sights is this?", 
+    a: "Death",
+    choices: ["Old age","Sickness","Death","Holy man"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Siddhartha sees a calm ascetic who has renounced worldly life. Which of the Four Sights is this?", 
+    a: "Holy man",
+    choices: ["Old age","Sickness","Death","Holy man"] 
+  },
+
+  // ----------------------
+  // Topic 2: Buddhism in China
+  // ----------------------
 
   { 
     prompt: "Choose the correct answer", 
@@ -60,94 +110,185 @@ const buddhismQuestions = [
 
   { 
     prompt: "Choose the correct answer", 
-    q: "Which of the following is NOT one of the Four Sights?", 
-    a: "A king",
-    choices: ["An old man","A sick person","A corpse","A king"] 
+    q: "What role did merchants and missionaries play in spreading Buddhism to China?", 
+    a: "Missionaries taught Buddhism and merchants carried texts and ideas",
+    choices: [
+      "Missionaries taught Buddhism and merchants carried texts and ideas",
+      "Merchants forced people to convert",
+      "Missionaries built armies",
+      "Emperors banned translations"
+    ] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "Which Chinese philosophy influenced the emphasis on filial piety in Buddhism?", 
+    q: "Which philosophy influenced filial piety in Chinese Buddhism?", 
     a: "Confucianism",
-    choices: ["Confucianism","Daoism","Legalism","Mahayana"] 
+    choices: ["Confucianism","Daoism","Legalism","Hinduism"] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "Which Chinese philosophy influenced the integration of Chan (Zen) meditation?", 
+    q: "Which philosophy influenced Chan (Zen) meditation?", 
     a: "Daoism",
     choices: ["Confucianism","Daoism","Legalism","Theravada"] 
   },
 
+  // ----------------------
+  // Topic 3: Four Noble Truths
+  // ----------------------
+
   { 
-    prompt: "Fill in the blank", 
-    q: "The First Noble Truth states that life is ____ while the Second Noble Truth identifies the cause as ____.", 
-    a: "suffering, craving",
-    choices: ["happiness, desire","suffering, craving","ignorance, karma","attachment, ego"] 
+    prompt: "Choose the correct answer", 
+    q: "The First Noble Truth teaches that life is what?", 
+    a: "Suffering",
+    choices: ["Happiness","Suffering","Ignorance","Peace"] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "The Fourth Noble Truth teaches that the path to end suffering is called what?", 
+    q: "The Second Noble Truth teaches that suffering is caused by:", 
+    a: "Craving",
+    choices: ["Craving","Karma","Fate","Gods"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "The Fourth Noble Truth teaches that suffering ends through:", 
     a: "The Noble Eightfold Path",
-    choices: ["The Four Sights","The Ten Precepts","The Noble Eightfold Path","The Five Precepts"] 
+    choices: ["The Five Precepts","The Noble Eightfold Path","Meditation alone","Rebirth"] 
   },
 
   { 
     prompt: "Choose the correct answer", 
     q: "The doctrine of no-self (anatta) teaches that:", 
     a: "There is no permanent self or soul",
-    choices: ["There is no permanent self or soul","The soul is eternal","The self is more important than others","Anger is inevitable"] 
+    choices: [
+      "There is no permanent self or soul",
+      "The soul lives forever unchanged",
+      "Anger is natural and permanent",
+      "The self must always be defended"
+    ] 
   },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "How does no-self relate to anger?", 
+    a: "Anger arises when we defend a false sense of self",
+    choices: [
+      "Anger arises when we defend a false sense of self",
+      "Anger is encouraged in Buddhism",
+      "Anger leads to enlightenment",
+      "Anger has no cause"
+    ] 
+  },
+
+  // ----------------------
+  // Topic 4: Theravada Ethics
+  // ----------------------
 
   { 
     prompt: "Choose the correct answer", 
     q: "What is the primary focus of Theravada Buddhist ethics?", 
     a: "Following the Eightfold Path",
-    choices: ["Accumulating wealth","Following the Eightfold Path","Spreading religion to others","Building a strong army"] 
+    choices: ["Accumulating wealth","Following the Eightfold Path","Spreading religion","Building an army"] 
   },
 
+  // Five Precepts Identification (Extra)
   { 
     prompt: "Choose the correct answer", 
-    q: "Which of the following is one of the Five Precepts?", 
+    q: "Refusing to harm animals reflects which precept?", 
     a: "No killing",
-    choices: ["No killing","Meditation daily","Worship the king","Attend temple every day"] 
+    choices: ["No killing","No stealing","No lying","No sexual misconduct","No intoxicants"] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "A Theravada Buddhist tempted to lie would be guided by which precept?", 
-    a: "No lying",
-    choices: ["No stealing","No lying","No killing","No intoxicants"] 
+    q: "Returning a lost wallet reflects which precept?", 
+    a: "No stealing",
+    choices: ["No killing","No stealing","No lying","No sexual misconduct","No intoxicants"] 
   },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Admitting the truth even when it is difficult reflects which precept?", 
+    a: "No lying",
+    choices: ["No killing","No stealing","No lying","No sexual misconduct","No intoxicants"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Remaining faithful in relationships reflects which precept?", 
+    a: "No sexual misconduct",
+    choices: ["No killing","No stealing","No lying","No sexual misconduct","No intoxicants"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "Avoiding alcohol to keep the mind clear reflects which precept?", 
+    a: "No intoxicants",
+    choices: ["No killing","No stealing","No lying","No sexual misconduct","No intoxicants"] 
+  },
+
+  { 
+    prompt: "Choose the correct answer", 
+    q: "If tempted to lie to avoid trouble, a Theravada Buddhist would:", 
+    a: "Tell the truth to remain ethical",
+    choices: [
+      "Tell the truth to remain ethical",
+      "Lie if it helps them",
+      "Ignore the situation",
+      "Blame someone else"
+    ] 
+  },
+
+  // ----------------------
+  // Topic 5: Mahayana Ethics
+  // ----------------------
 
   { 
     prompt: "True/False", 
-    q: "Mahayana Buddhism emphasizes the individual’s path to enlightenment over helping others.", 
-    a: "False",
+    q: "Mahayana Buddhism emphasizes helping others achieve enlightenment.", 
+    a: "True",
     choices: ["True","False"] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "A bodhisattva in Mahayana Buddhism is:", 
-    a: "Someone who delays their own enlightenment to help others", 
-    choices: ["Someone who delays their own enlightenment to help others","A teacher of Theravada Buddhism","A monk who lives alone","A deity"] 
+    q: "A bodhisattva is someone who:", 
+    a: "Delays their own enlightenment to help others",
+    choices: [
+      "Delays their own enlightenment to help others",
+      "Seeks wealth and power",
+      "Rejects compassion",
+      "Lives only for themselves"
+    ] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "Mahayana ethics emphasize:", 
+    q: "Mahayana ethics focus on:", 
     a: "Compassion and selflessness",
-    choices: ["Compassion and selflessness","Accumulating wealth","Anger management","Filial obedience only"] 
+    choices: [
+      "Compassion and selflessness",
+      "Military strength",
+      "Wealth accumulation",
+      "Social hierarchy"
+    ] 
   },
 
   { 
     prompt: "Choose the correct answer", 
-    q: "Buddhists believe that after death, rebirth occurs:", 
-    a: "Without a permanent self, like a flame lighting another flame",
-    choices: ["With the same permanent soul","Without a permanent self, like a flame lighting another flame","Into the same body","Only for monks"] 
+    q: "Buddhists believe rebirth happens:", 
+    a: "Without a permanent self, shaped by karma",
+    choices: [
+      "With an eternal soul unchanged",
+      "Without a permanent self, shaped by karma",
+      "Only once",
+      "Only for monks"
+    ] 
   }
+
 ];
 // ----------------------
 // Quiz Logic
