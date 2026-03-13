@@ -1,311 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vocabulary Flashcards - Hard Mode</title>
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f4f6f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
+<meta charset="UTF-8">
+<title>Photography & Photoshop Study Quiz</title>
 
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 30px;
-      max-width: 600px;
-      text-align: center;
-    }
+<style>
+body{
+font-family: Arial, sans-serif;
+max-width:700px;
+margin:40px auto;
+text-align:center;
+}
 
-    h2 {
-      color: #333;
-    }
+#prompt{font-size:18px;margin-bottom:10px;}
+#question{font-size:26px;margin:20px 0;}
 
-    .options {
-      margin-top: 20px;
-    }
+.choice{
+border:1px solid #ccc;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+cursor:pointer;
+font-size:18px;
+}
 
-    button.option {
-      display: block;
-      width: 100%;
-      background: #eee;
-      border: none;
-      border-radius: 6px;
-      padding: 12px;
-      margin: 8px 0;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.choice:hover{background:#f0f0f0;}
 
-    button.option:hover {
-      background: #ddd;
-    }
+button{
+margin-top:20px;
+padding:10px 20px;
+font-size:16px;
+}
+</style>
 
-    .correct {
-      background: #4CAF50 !important;
-      color: white;
-    }
-
-    .incorrect {
-      background: #f44336 !important;
-      color: white;
-    }
-
-    #nextBtn {
-      margin-top: 20px;
-      display: none;
-      background: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    #nextBtn:hover {
-      background: #1976D2;
-    }
-
-    #score {
-      font-size: 18px;
-      margin-top: 15px;
-      color: #333;
-    }
-
-    #hardModeBtn {
-      margin-bottom: 20px;
-      background: #FF9800;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    #hardModeBtn:hover {
-      background: #F57C00;
-    }
-
-    #timer {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #d32f2f;
-    }
-  </style>
 </head>
 <body>
-  <button id="hardModeBtn" onclick="toggleHardMode()">Toggle Hard Mode</button>
-  <div class="card" id="card">
-    <h2 id="term"></h2>
-    <div class="options" id="options"></div>
-    <button id="nextBtn" onclick="nextCard()">Next</button>
-    <div id="timer"></div>
-    <div id="score"></div>
-  </div>
 
-  <script>
-const vocab = [
-  {
-    term: "Rule of Thirds",
-    definition: "A composition technique that divides an image into 9 equal parts and places important elements along the lines or intersections"
-  },
-  {
-    term: "Balancing Elements",
-    definition: "Using secondary objects to balance the visual weight of a main subject placed off-center"
-  },
-  {
-    term: "Leading Lines",
-    definition: "Lines in an image that guide the viewer’s eye toward the subject or through the scene"
-  },
-  {
-    term: "Symmetry and Patterns",
-    definition: "Using repeated shapes or mirror-like balance to create visually striking compositions"
-  },
-  {
-    term: "Breaking Symmetry",
-    definition: "Introducing an element that disrupts a pattern or symmetry to create interest or tension"
-  },
-  {
-    term: "Viewpoint",
-    definition: "The position or angle from which a photograph is taken, affecting composition and message"
-  },
-  {
-    term: "Background",
-    definition: "The area behind the subject that should be uncluttered to avoid distracting from the main focus"
-  },
-  {
-    term: "Depth",
-    definition: "The sense of distance in a photo created using foreground, middle ground, and background"
-  },
-  {
-    term: "Overlapping",
-    definition: "A technique where objects partially cover each other to create a sense of depth"
-  },
-  {
-    term: "Framing",
-    definition: "Using objects in a scene to surround and isolate the main subject"
-  },
-  {
-    term: "Cropping",
-    definition: "Removing unnecessary parts of an image to focus attention on the subject"
-  },
-  {
-    term: "Experimentation",
-    definition: "Trying different compositions and ideas made easier by digital photography"
-  },
-  {
-    term: "ISO",
-    definition: "The camera’s sensitivity to light"
-  },
-  {
-    term: "Aperture",
-    definition: "The adjustable opening in a camera lens that controls how much light enters"
-  },
-  {
-    term: "Exposure",
-    definition: "The total amount of light reaching the camera sensor, affecting image brightness"
-  },
-  {
-    term: "White Balance",
-    definition: "A camera setting that adjusts colors so whites appear neutral under different lighting"
-  },
-  {
-    term: "Color Temperature (Kelvin)",
-    definition: "A measurement of how warm or cool light appears"
-  },
-  {
-    term: "Aspect Ratio",
-    definition: "The ratio of width to height of an image, such as 3:2, 4:3, or 16:9"
-  },
-  {
-    term: "Histogram",
-    definition: "A graph showing the distribution of tones from shadows to highlights"
-  },
-  {
-    term: "RAW File",
-    definition: "An uncompressed image file that contains all data captured by the camera sensor"
-  }
+<h1>Photography & Photoshop Quiz</h1>
+
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
+
+<script>
+
+const questions=[
+
+{prompt:"Choose the correct answer",
+q:"What is the Rule of Thirds?",
+a:"Dividing the frame into 9 equal parts and placing subjects on the lines",
+choices:[
+"Dividing the frame into 9 equal parts and placing subjects on the lines",
+"Always putting the subject in the center",
+"Using three cameras",
+"Cropping a photo into thirds"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What are leading lines used for?",
+a:"To guide the viewer's eye to the subject",
+choices:[
+"To guide the viewer's eye to the subject",
+"To blur the background",
+"To brighten photos",
+"To change colors"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does balancing elements mean?",
+a:"Using objects to balance visual weight in a photo",
+choices:[
+"Using objects to balance visual weight in a photo",
+"Taking photos perfectly centered",
+"Making everything the same size",
+"Removing all objects from the frame"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does symmetry in photography mean?",
+a:"Both sides of an image look similar or mirrored",
+choices:[
+"Both sides of an image look similar or mirrored",
+"Using only circles",
+"Only photographing buildings",
+"Taking pictures upside down"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is viewpoint?",
+a:"The position or angle the photographer shoots from",
+choices:[
+"The position or angle the photographer shoots from",
+"The brightness of a photo",
+"The color temperature",
+"The size of the lens"
+]},
+
+{prompt:"Choose the correct answer",
+q:"Why is background important in photography?",
+a:"A messy background can distract from the subject",
+choices:[
+"A messy background can distract from the subject",
+"It changes camera batteries",
+"It controls ISO",
+"It sharpens the lens"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does depth mean in photography?",
+a:"Creating a sense of distance in the image",
+choices:[
+"Creating a sense of distance in the image",
+"Taking underwater photos",
+"Using the zoom tool",
+"Changing exposure"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is framing?",
+a:"Using objects to surround or highlight a subject",
+choices:[
+"Using objects to surround or highlight a subject",
+"Deleting part of a photo",
+"Adding filters",
+"Making photos square"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does cropping do?",
+a:"Removes unwanted parts of an image",
+choices:[
+"Removes unwanted parts of an image",
+"Adds new objects",
+"Changes ISO",
+"Changes shutter speed"
+]},
+
+{prompt:"Choose the correct answer",
+q:"Why is experimentation important in photography?",
+a:"Trying different angles and ideas can improve photos",
+choices:[
+"Trying different angles and ideas can improve photos",
+"It deletes bad photos",
+"It fixes lighting automatically",
+"It changes the camera lens"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does ISO control?",
+a:"The camera's sensitivity to light",
+choices:[
+"The camera's sensitivity to light",
+"The lens zoom level",
+"The camera battery",
+"The file size"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does aperture control?",
+a:"How much light enters the camera lens",
+choices:[
+"How much light enters the camera lens",
+"The color of the photo",
+"The camera storage",
+"The focus mode"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is exposure?",
+a:"The amount of light captured in a photo",
+choices:[
+"The amount of light captured in a photo",
+"The camera brand",
+"The focus distance",
+"The background blur"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does white balance adjust?",
+a:"The color tone of lighting",
+choices:[
+"The color tone of lighting",
+"The photo resolution",
+"The camera battery",
+"The zoom level"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is a histogram?",
+a:"A graph showing brightness levels in an image",
+choices:[
+"A graph showing brightness levels in an image",
+"A lens type",
+"A camera strap",
+"A file format"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is a RAW file?",
+a:"An uncompressed image with full camera data",
+choices:[
+"An uncompressed image with full camera data",
+"A blurry image",
+"A small compressed photo",
+"A screenshot"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What do adjustment layers do in Photoshop?",
+a:"Allow edits without permanently changing the image",
+choices:[
+"Allow edits without permanently changing the image",
+"Delete layers",
+"Flatten images",
+"Change camera settings"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does the Healing Brush Tool do?",
+a:"Removes blemishes or imperfections",
+choices:[
+"Removes blemishes or imperfections",
+"Adds blur",
+"Changes brightness",
+"Rotates images"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is the Clone Stamp tool used for?",
+a:"Copying pixels from one area to another",
+choices:[
+"Copying pixels from one area to another",
+"Adding color",
+"Cropping images",
+"Changing exposure"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does the Dodge tool do?",
+a:"Lightens parts of an image",
+choices:[
+"Lightens parts of an image",
+"Darkens parts of an image",
+"Blurs the image",
+"Sharpens the image"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What does the Burn tool do?",
+a:"Darkens parts of an image",
+choices:[
+"Darkens parts of an image",
+"Brightens parts of an image",
+"Deletes pixels",
+"Sharpens edges"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is a layer mask used for?",
+a:"Hiding or revealing parts of a layer",
+choices:[
+"Hiding or revealing parts of a layer",
+"Changing the lens",
+"Cropping photos",
+"Adjusting ISO"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What do blending modes do?",
+a:"Change how layers interact with each other",
+choices:[
+"Change how layers interact with each other",
+"Resize images",
+"Delete backgrounds",
+"Zoom images"
+]},
+
+{prompt:"Choose the correct answer",
+q:"Why might a photographer convert a photo to black and white?",
+a:"To focus on contrast, texture, and lighting",
+choices:[
+"To focus on contrast, texture, and lighting",
+"To remove the subject",
+"To reduce resolution",
+"To increase file size"
+]},
+
+{prompt:"Choose the correct answer",
+q:"What is an unedited photo?",
+a:"A photo straight from the camera without changes",
+choices:[
+"A photo straight from the camera without changes",
+"A photo with filters",
+"A cropped image",
+"A layered Photoshop file"
+]}
+
 ];
 
+function shuffle(arr){
+return arr.sort(()=>Math.random()-0.5);
+}
 
+const quiz=shuffle(questions);
 
-    let current = 0;
-    let score = 0;
-    let hardMode = false;
-    let timerInterval;
+let index=0;
+let score=0;
+let answered=false;
 
-    const termElem = document.getElementById("term");
-    const optionsElem = document.getElementById("options");
-    const nextBtn = document.getElementById("nextBtn");
-    const scoreElem = document.getElementById("score");
-    const timerElem = document.getElementById("timer");
+function load(){
+answered=false;
+const item=quiz[index];
 
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
+document.getElementById("prompt").textContent=item.prompt;
+document.getElementById("question").textContent=item.q;
+document.getElementById("progress").textContent=`Question ${index+1} of ${quiz.length}`;
 
-    function toggleHardMode() {
-      hardMode = !hardMode;
-      alert(hardMode ? "Hard Mode ON: 5 seconds per question!" : "Hard Mode OFF");
-      current = 0;
-      score = 0;
-      shuffle(vocab);
-      loadCard();
-    }
+const div=document.getElementById("choices");
+div.innerHTML="";
 
-    function loadCard() {
-      clearInterval(timerInterval);
-      nextBtn.style.display = "none";
-      optionsElem.innerHTML = "";
-      timerElem.textContent = "";
+const choices=shuffle(item.choices.slice());
 
-      if (current >= vocab.length) {
-        document.getElementById("card").innerHTML = `
-          <h2>Quiz Complete!</h2>
-          <p>Your final score: <strong>${score}/${vocab.length}</strong></p>
-        `;
-        return;
-      }
+choices.forEach(c=>{
+const el=document.createElement("div");
+el.className="choice";
+el.textContent=c;
+el.onclick=()=>select(c,el,item.a);
+div.appendChild(el);
+});
+}
 
-      const word = vocab[current];
-      termElem.textContent = word.term;
+function select(choice,el,correctAnswer){
+if(answered)return;
+answered=true;
 
-      // Get 3 random wrong definitions
-      let wrongDefs = shuffle(vocab.filter(v => v.term !== word.term))
-                        .slice(0, 3)
-                        .map(v => v.definition);
-      let allOptions = shuffle([word.definition, ...wrongDefs]);
+if(choice===correctAnswer){
+score++;
+el.style.background="#c8f7c5";
+}else{
+el.style.background="#f7c5c5";
+const div=document.getElementById("choices");
 
-      allOptions.forEach(def => {
-        const btn = document.createElement("button");
-        btn.classList.add("option");
-        btn.textContent = def;
-        btn.onclick = () => checkAnswer(btn, word.definition);
-        optionsElem.appendChild(btn);
-      });
+Array.from(div.children).forEach(child=>{
+if(child.textContent===correctAnswer){
+child.style.background="#c8f7c5";
+child.style.fontWeight="bold";
+}
+});
+}
+}
 
-      if (hardMode) startTimer(5, word.definition);
-    }
+function nextQuestion(){
+if(!answered)return;
 
-    function startTimer(seconds, correctDef) {
-      let timeLeft = seconds;
-      timerElem.textContent = `Time: ${timeLeft}s`;
+index++;
 
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerElem.textContent = `Time: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          autoFail(correctDef);
-        }
-      }, 1000);
-    }
+if(index<quiz.length){
+load();
+}else{
+document.body.innerHTML=`<h1>Quiz Complete</h1><h2>Your Score: ${score} / ${quiz.length}</h2>`;
+}
+}
 
-    function autoFail(correctDef) {
-      const buttons = document.querySelectorAll(".option");
-      buttons.forEach(b => {
-        b.disabled = true;
-        if (b.textContent === correctDef) b.classList.add("correct");
-      });
-      scoreElem.textContent = `Score: ${score}/${vocab.length}`;
-      nextBtn.style.display = "inline-block";
-    }
+load();
 
-    function checkAnswer(button, correctDef) {
-      clearInterval(timerInterval);
-      const buttons = document.querySelectorAll(".option");
-      buttons.forEach(b => {
-        b.disabled = true;
-        if (b.textContent === correctDef) b.classList.add("correct");
-      });
+</script>
 
-      if (button.textContent === correctDef) {
-        score++;
-      } else {
-        button.classList.add("incorrect");
-      }
-
-      scoreElem.textContent = `Score: ${score}/${vocab.length}`;
-      nextBtn.style.display = "inline-block";
-    }
-
-    function nextCard() {
-      current++;
-      loadCard();
-    }
-
-    shuffle(vocab);
-    loadCard();
-  </script>
 </body>
 </html>
-
