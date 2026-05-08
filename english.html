@@ -2,120 +2,297 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Macbeth Quiz</title>
+<title>A Raisin in the Sun Quiz</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    max-width: 600px;
+    max-width: 700px;
     margin: 40px auto;
     text-align: center;
   }
-  #prompt { font-size: 18px; margin-bottom: 10px; }
-  #question { font-size: 28px; margin: 20px 0; }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  #prompt {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #555;
+  }
+
+  #question {
+    font-size: 28px;
+    margin: 20px 0;
+  }
+
   .choice {
     border: 1px solid #ccc;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 6px;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 18px;
+    transition: 0.2s;
   }
-  .choice:hover { background: #f0f0f0; }
+
+  .choice:hover {
+    background: #f0f0f0;
+  }
+
   button {
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 10px 24px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #progress {
+    margin-top: 20px;
     font-size: 16px;
   }
 </style>
 </head>
 <body>
 
-<h1>Macbeth Quiz</h1>
+<h1>A Raisin in the Sun Quiz</h1>
 
 <div id="prompt"></div>
 <div id="question"></div>
 <div id="choices"></div>
 
 <button onclick="nextQuestion()">Next</button>
+
 <p id="progress"></p>
 
 <script>
-// ----------------------
-// Macbeth Questions
-// ----------------------
-const otherQuestions = [
-  { prompt:"Choose the correct answer", q:"Why is the Porter scene included in Macbeth?", a:"To provide comic relief and lower the tension",
-    choices:["To provide comic relief and lower the tension","To introduce a new villain","To explain Macbeth’s childhood","To reveal Banquo’s prophecy"] },
+// -----------------------------------
+// A Raisin in the Sun Questions
+// -----------------------------------
+const questions = [
+  {
+    prompt: "Choose the correct answer",
+    q: "Why was Ruth upset when Walter gave Travis money?",
+    a: "She felt disrespected because she already said no",
+    choices: [
+      "She felt disrespected because she already said no",
+      "She needed the money for groceries",
+      "Travis was grounded",
+      "Walter borrowed the money from Mama"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"What does the first apparition tell Macbeth?", a:"Beware Macduff",
-    choices:["Beware Macduff","Beware Banquo","Beware Malcolm","Beware Fleance"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Why does Ruth faint at the end of the scene?",
+    a: "To hint that she is pregnant",
+    choices: [
+      "To hint that she is pregnant",
+      "She is sick with the flu",
+      "She is exhausted from work",
+      "She hurt herself"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"What does the second apparition tell Macbeth?", a:"Birnam Wood will march to Dunsinane",
-    choices:["Birnam Wood will march to Dunsinane","Macbeth will be king forever","Banquo’s sons will die","Macduff is already dead"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who gives Beneatha a gift?",
+    a: "Joseph Asagai",
+    choices: [
+      "Joseph Asagai",
+      "George Murchison",
+      "Walter",
+      "Mama"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"What does the third apparition tell Macbeth?", a:"No one born of a woman will harm him",
-    choices:["No one born of a woman will harm him","He will die in battle","Macduff is coming for him","He will lose the throne"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Did Ruth go to the family doctor about her pregnancy?",
+    a: "No",
+    choices: [
+      "No",
+      "Yes"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Where did Macduff go?", a:"England",
-    choices:["England","Ireland","Scotland","France"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who wears white shoes?",
+    a: "George",
+    choices: [
+      "George",
+      "Walter",
+      "Asagai",
+      "Travis"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Who did Macduff visit in England?", a:"Malcolm",
-    choices:["Malcolm","Banquo","Ross","Fleance"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "What were Walter and Beneatha doing in the last scene?",
+    a: "They were connecting to their culture",
+    choices: [
+      "They were connecting to their culture",
+      "They were arguing",
+      "They were planning a business",
+      "They were packing"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"What does Macbeth hallucinate at his coronation banquet?", a:"The ghost of Banquo",
-    choices:["The ghost of Banquo","A floating dagger","Blood on his hands","The witches"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "What does Mama buy with her money?",
+    a: "A house in the White neighborhood of Chicago",
+    choices: [
+      "A house in the White neighborhood of Chicago",
+      "A new car",
+      "A grocery store",
+      "Jewelry for Beneatha"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Who says 'Here's the smell of blood still; all the perfumes of Arabia will not sweeten this little hand'?", a:"Lady Macbeth",
-    choices:["Lady Macbeth","Macbeth","Lady Macduff","The Porter"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Why does Beneatha cut her hair?",
+    a: "To connect to her African roots",
+    choices: [
+      "To connect to her African roots",
+      "To fit into White society",
+      "Because George told her to",
+      "Because Mama wanted her to"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Lady Macbeth says she would have killed Duncan, but he looked too much like her what?", a:"Father",
-    choices:["Father","Brother","Son","Husband"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "What country were the gifts from?",
+    a: "Nigeria",
+    choices: [
+      "Nigeria",
+      "Kenya",
+      "Egypt",
+      "Ghana"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Does the motif of nature appear when Malcolm tells his army to camouflage with branches?", a:"Yes",
-    choices:["Yes","No"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who is the intellectual character?",
+    a: "Mr. Asagai",
+    choices: [
+      "Mr. Asagai",
+      "Walter",
+      "George",
+      "Travis"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Who escapes from the murderers?", a:"Fleance",
-    choices:["Fleance","Banquo","Macduff","Malcolm"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who is a feminist?",
+    a: "Beneatha",
+    choices: [
+      "Beneatha",
+      "Ruth",
+      "Mama",
+      "Mrs. Johnson"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Who was 'untimely ripped' from their mother?", a:"Macduff",
-    choices:["Macduff","Macbeth","Banquo","Malcolm"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who is called an assimilationist Negro?",
+    a: "George",
+    choices: [
+      "George",
+      "Walter",
+      "Asagai",
+      "Travis"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Who witnesses Lady Macbeth sleepwalking?", a:"A gentlewoman and a doctor",
-    choices:["A gentlewoman and a doctor","Macbeth and Banquo","Ross and Lennox","The witches"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who represents the future of the family?",
+    a: "Travis",
+    choices: [
+      "Travis",
+      "Walter",
+      "Beneatha",
+      "Mama"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Were Lady Macduff and her children killed because of Macbeth?", a:"Yes",
-    choices:["Yes","No"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who considers abortion?",
+    a: "Ruth",
+    choices: [
+      "Ruth",
+      "Beneatha",
+      "Mama",
+      "Mrs. Johnson"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Who tells Macduff that his family has been killed?", a:"Ross",
-    choices:["Ross","Malcolm","Macbeth","Lennox"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who is bitter throughout much of the play?",
+    a: "Walter",
+    choices: [
+      "Walter",
+      "Travis",
+      "Asagai",
+      "George"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Which ingredient is NOT in the witches' brew?", a:"Lady Macbeth’s hair",
-    choices:["Lady Macbeth’s hair","Dragon scales","Finger of a baby","Baboon blood"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who is the head of the family?",
+    a: "Mama",
+    choices: [
+      "Mama",
+      "Walter",
+      "Ruth",
+      "Beneatha"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"What excuse does Macbeth give for his strange behavior at the banquet?", a:"He has struggled with mental illness since childhood",
-    choices:["He has struggled with mental illness since childhood","He is drunk","He is tired","He is angry at Banquo"] },
+  {
+    prompt: "Choose the correct answer",
+    q: "Who says 'Damn those eggs'?",
+    a: "Walter",
+    choices: [
+      "Walter",
+      "George",
+      "Asagai",
+      "Travis"
+    ]
+  },
 
-  { prompt:"Choose the correct answer", q:"Where does Donalbain flee after Duncan’s murder?", a:"Ireland",
-    choices:["Ireland","England","France","Wales"] },
-
-  { prompt:"Choose the correct answer", q:"Lady Macbeth wishes she were what so she could kill Duncan herself?", a:"A man",
-    choices:["A man","A witch","A queen","A soldier"] },
-
-  { prompt:"Choose the correct answer", q:"Who discovers King Duncan’s body?", a:"Macduff",
-    choices:["Macduff","Macbeth","Banquo","Lennox"] },
-
-  { prompt:"Choose the correct answer", q:"Who kills Macbeth?", a:"Macduff",
-    choices:["Macduff","Malcolm","Banquo","Fleance"] }
+  {
+    prompt: "Choose the correct answer",
+    q: "Who says 'Lord knows we put enough rent into this here rat trap already'?",
+    a: "Mama",
+    choices: [
+      "Mama",
+      "Ruth",
+      "Beneatha",
+      "Mrs. Johnson"
+    ]
+  }
 ];
 
-// ----------------------
+// -----------------------------------
 // Quiz Logic
-// ----------------------
+// -----------------------------------
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-const quiz = shuffle(otherQuestions);
+const quiz = shuffle(questions);
 
 let index = 0;
 let score = 0;
@@ -123,28 +300,33 @@ let answered = false;
 
 function load() {
   answered = false;
+
   const item = quiz[index];
 
   document.getElementById("prompt").textContent = item.prompt;
   document.getElementById("question").textContent = item.q;
-  document.getElementById("progress").textContent = `Question ${index+1} of ${quiz.length}`;
+  document.getElementById("progress").textContent =
+    `Question ${index + 1} of ${quiz.length}`;
 
   const div = document.getElementById("choices");
   div.innerHTML = "";
 
   const choices = shuffle(item.choices.slice());
 
-  choices.forEach(c => {
+  choices.forEach(choice => {
     const el = document.createElement("div");
     el.className = "choice";
-    el.textContent = c;
-    el.onclick = () => select(c, el, item.a);
+    el.textContent = choice;
+
+    el.onclick = () => select(choice, el, item.a);
+
     div.appendChild(el);
   });
 }
 
 function select(choice, el, correctAnswer) {
   if (answered) return;
+
   answered = true;
 
   if (choice === correctAnswer) {
@@ -152,7 +334,9 @@ function select(choice, el, correctAnswer) {
     el.style.background = "#c8f7c5";
   } else {
     el.style.background = "#f7c5c5";
+
     const div = document.getElementById("choices");
+
     Array.from(div.children).forEach(child => {
       if (child.textContent === correctAnswer) {
         child.style.background = "#c8f7c5";
@@ -164,11 +348,16 @@ function select(choice, el, correctAnswer) {
 
 function nextQuestion() {
   if (!answered) return;
+
   index++;
+
   if (index < quiz.length) {
     load();
   } else {
-    document.body.innerHTML = `<h1>Quiz Complete</h1><h2>Your Score: ${score} / ${quiz.length}</h2>`;
+    document.body.innerHTML = `
+      <h1>Quiz Complete!</h1>
+      <h2>Your Score: ${score} / ${quiz.length}</h2>
+    `;
   }
 }
 
