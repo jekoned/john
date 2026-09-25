@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WEE POE Engineering Design Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+
+  #prompt {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  #question {
+    font-size: 28px;
+    margin: 20px 0;
+  }
+
+  .choice {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  .choice:hover {
+    background: #f0f0f0;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>WEE POE Engineering Quiz</h1>
+
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
+
+<script>
+
+// ----------------------
+// WEE POE Questions
+// Unit 0.1 – 0.2.1
+// ----------------------
+
+const engineeringQuestions = [
+
+  // ----------------------
+  // Topic 1: Engineering Design Process
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does EDP stand for?",
+    a: "Engineering Design Process",
+    choices: [
+      "Engineering Design Process",
+      "Engineering Drawing Procedure",
+      "Electronic Design Program",
+      "Engineering Development Project"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the Engineering Design Process?",
+    a: "A systematic, iterative problem-solving strategy used to develop and refine solutions",
+    choices: [
+      "A systematic, iterative problem-solving strategy used to develop and refine solutions",
+      "A method for drawing only 2D objects",
+      "A process used only to build prototypes",
+      "A way to calculate the cost of materials"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "The Engineering Design Process uses criteria and constraints to:",
+    a: "Develop and refine solutions to human problems",
+    choices: [
+      "Develop and refine solutions to human problems",
+      "Eliminate the need for testing",
+      "Make every design identical",
+      "Avoid making prototypes"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a stakeholder?",
+    a: "Anyone affected by or interested in the outcome of an engineering project",
+    choices: [
+      "Anyone affected by or interested in the outcome of an engineering project",
+      "Only the engineer who creates the design",
+      "Only the person who buys the final product",
+      "A machine used to test a product"
+    ]
+  },
+
+  // ----------------------
+  // Topic 2: Problem Statements
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a problem statement?",
+    a: "A concise description of an issue that identifies who, what, where/when, and why",
+    choices: [
+      "A concise description of an issue that identifies who, what, where/when, and why",
+      "A list of possible solutions",
+      "A detailed drawing of a prototype",
+      "A list of materials needed to build a product"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "A good problem statement should:",
+    a: "Avoid suggesting a specific solution",
+    choices: [
+      "Avoid suggesting a specific solution",
+      "Tell engineers exactly what product to build",
+      "Only describe the desired final product",
+      "Include only the cost of the project"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Why should a problem statement leave room for multiple solutions?",
+    a: "So engineers can explore different creative approaches",
+    choices: [
+      "So engineers can explore different creative approaches",
+      "So engineers do not have to test anything",
+      "So the client can avoid making decisions",
+      "So the design process can be skipped"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What technique is used to drill past surface-level symptoms and find a root cause?",
+    a: "The 5 Whys",
+    choices: [
+      "The 5 Whys",
+      "The 5 W's",
+      "The Design Matrix",
+      "The CAD Method"
+    ]
+  },
+
+  // ----------------------
+  // Topic 3: Design Brief
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a design brief?",
+    a: "A formal document outlining the problem, requirements, target consumer, criteria, and constraints",
+    choices: [
+      "A formal document outlining the problem, requirements, target consumer, criteria, and constraints",
+      "A 3D CAD model",
+      "A testing procedure",
+      "A list of engineering equations"
+    ]
+  },
+
+  // ----------------------
+  // Topic 4: Cantilevers & Forces
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a cantilever?",
+    a: "A beam anchored at only one end that carries a load over an unsupported span",
+    choices: [
+      "A beam anchored at only one end that carries a load over an unsupported span",
+      "A beam supported equally at both ends",
+      "A type of CAD software",
+      "A rotating mechanical joint"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which force is a pulling-apart or stretching force?",
+    a: "Tension",
+    choices: [
+      "Tension",
+      "Compression",
+      "Moment",
+      "Friction"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which force is a pushing-together or squeezing force?",
+    a: "Compression",
+    choices: [
+      "Tension",
+      "Compression",
+      "Moment",
+      "Shear"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a moment?",
+    a: "A turning or rotational force applied around a fixed point",
+    choices: [
+      "A turning or rotational force applied around a fixed point",
+      "A force that only pulls an object apart",
+      "A force that only pushes an object together",
+      "The weight of an object"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which equation represents moment?",
+    a: "M = F × d",
+    choices: [
+      "M = F × d",
+      "M = F ÷ d",
+      "M = F + d",
+      "M = d ÷ F"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "For a horizontal cantilever beam with a load on top, the top surface experiences:",
+    a: "Tension",
+    choices: [
+      "Tension",
+      "Compression",
+      "No force",
+      "Only friction"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "For a horizontal cantilever beam with a load on top, the bottom surface experiences:",
+    a: "Compression",
+    choices: [
+      "Tension",
+      "Compression",
+      "No force",
+      "Only friction"
+    ]
+  },
+
+  // ----------------------
+  // Topic 5: Criteria & Constraints
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which describes a criterion?",
+    a: "A desired feature or goal for a design",
+    choices: [
+      "A desired feature or goal for a design",
+      "A hard limit on a design",
+      "A person affected by a design",
+      "A type of CAD operation"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which describes a constraint?",
+    a: "A hard limit such as budget, size, or material",
+    choices: [
+      "A hard limit such as budget, size, or material",
+      "A desired feature of a product",
+      "A possible design solution",
+      "A type of structural force"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which of the following is most likely a constraint?",
+    a: "The product cannot cost more than $50",
+    choices: [
+      "The product cannot cost more than $50",
+      "The product should look attractive",
+      "The product should be easy to use",
+      "The product should be comfortable"
+    ]
+  },
+
+  // ----------------------
+  // Topic 6: Decision Matrix
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a decision matrix used for?",
+    a: "Comparing design options against criteria and constraints using numerical ratings",
+    choices: [
+      "Comparing design options against criteria and constraints using numerical ratings",
+      "Creating a 3D model",
+      "Measuring structural forces",
+      "Writing a problem statement"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "In a decision matrix, design solutions are typically placed:",
+    a: "Along the rows",
+    choices: [
+      "Along the rows",
+      "Only in the title",
+      "Inside the CAD model",
+      "Only in the footer"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "In a decision matrix, criteria and constraints are typically placed:",
+    a: "Across the columns",
+    choices: [
+      "Across the columns",
+      "Only in the title",
+      "Inside the prototype",
+      "Under the final score"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does a rating of 1 and 5 commonly represent in a decision matrix?",
+    a: "1 = poor and 5 = excellent",
+    choices: [
+      "1 = poor and 5 = excellent",
+      "1 = excellent and 5 = poor",
+      "1 = expensive and 5 = cheap",
+      "1 = prototype and 5 = model"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "After scoring each concept in a decision matrix, engineers should:",
+    a: "Sum the scores and compare the concepts",
+    choices: [
+      "Sum the scores and compare the concepts",
+      "Ignore the scores",
+      "Build every design immediately",
+      "Remove all criteria"
+    ]
+  },
+
+  // ----------------------
+  // Topic 7: Model vs Prototype
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a model?",
+    a: "A static visual or mathematical representation used to study appearance, proportions, or layout",
+    choices: [
+      "A static visual or mathematical representation used to study appearance, proportions, or layout",
+      "A functional working build used to test performance",
+      "A testing variable",
+      "A decision matrix"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a prototype?",
+    a: "A functional working build used to test performance and collect data",
+    choices: [
+      "A functional working build used to test performance and collect data",
+      "A static drawing only",
+      "A problem statement",
+      "A list of design criteria"
+    ]
+  },
+
+  // ----------------------
+  // Topic 8: Controlled Testing
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the independent variable?",
+    a: "The single factor the engineer deliberately changes or controls",
+    choices: [
+      "The single factor the engineer deliberately changes or controls",
+      "The result being measured",
+      "The list of materials",
+      "The final score of a decision matrix"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the dependent variable?",
+    a: "The measurable result or outcome being observed",
+    choices: [
+      "The measurable result or outcome being observed",
+      "The factor deliberately changed",
+      "The cost of the prototype",
+      "The testing equipment"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "If an engineer changes the height from which an object is dropped, the drop height is the:",
+    a: "Independent variable",
+    choices: [
+      "Independent variable",
+      "Dependent variable",
+      "Constraint",
+      "Criterion"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "If an engineer measures how much a seam separates after a drop test, seam separation is the:",
+    a: "Dependent variable",
+    choices: [
+      "Independent variable",
+      "Dependent variable",
+      "Constraint",
+      "Stakeholder"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "A good testing procedure should be:",
+    a: "Clear and repeatable so another team can perform it without asking questions",
+    choices: [
+      "Clear and repeatable so another team can perform it without asking questions",
+      "Different every time",
+      "Based only on opinions",
+      "Written without measurements"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which of the following is important when designing a fair engineering test?",
+    a: "Clearly defining the goal, materials, variables, and repeatable steps",
+    choices: [
+      "Clearly defining the goal, materials, variables, and repeatable steps",
+      "Changing several variables at once",
+      "Avoiding measurements",
+      "Testing only once without recording data"
+    ]
+  },
+
+  // ----------------------
+  // Topic 9: CAD
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does CAD stand for?",
+    a: "Computer-Aided Design",
+    choices: [
+      "Computer-Aided Design",
+      "Computer Assembly Drawing",
+      "Calculated Architectural Design",
+      "Computer Analysis Device"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is CAD software used for?",
+    a: "Creating precise 2D or 3D digital models and preparing files for manufacturing",
+    choices: [
+      "Creating precise 2D or 3D digital models and preparing files for manufacturing",
+      "Only writing engineering reports",
+      "Only measuring physical objects",
+      "Only creating decision matrices"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the origin in a CAD workspace?",
+    a: "The primary reference point (0,0,0)",
+    choices: [
+      "The primary reference point (0,0,0)",
+      "The outer edge of the model",
+      "The center of every circle",
+      "The location of the final prototype"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does 'Normal To' mean in CAD?",
+    a: "Viewing a selected plane or surface at 90 degrees",
+    choices: [
+      "Viewing a selected plane or surface at 90 degrees",
+      "Rotating a model exactly 30 degrees",
+      "Extruding a sketch",
+      "Deleting a face"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a closed profile?",
+    a: "A 2D shape whose boundary lines connect completely with no gaps",
+    choices: [
+      "A 2D shape whose boundary lines connect completely with no gaps",
+      "A 3D object with an open surface",
+      "A completed prototype",
+      "A dimension line"
+    ]
+  },
+
+  // ----------------------
+  // Topic 10: CAD Operations
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does Extrude Add do?",
+    a: "Extends a 2D profile into 3D space to create solid material",
+    choices: [
+      "Extends a 2D profile into 3D space to create solid material",
+      "Cuts material away from a solid",
+      "Rounds an edge",
+      "Rotates a sketch around an axis"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does Extrude Remove do?",
+    a: "Removes material from an existing 3D body",
+    choices: [
+      "Removes material from an existing 3D body",
+      "Adds material to a body",
+      "Rounds a sharp edge",
+      "Creates a multiview drawing"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does a fillet do?",
+    a: "Rounds off a sharp internal or external edge",
+    choices: [
+      "Rounds off a sharp internal or external edge",
+      "Creates a hole using a sketch",
+      "Moves the origin",
+      "Creates a decision matrix"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does the Revolve tool do?",
+    a: "Rotates a 2D closed profile around a reference axis to create a 3D object",
+    choices: [
+      "Rotates a 2D closed profile around a reference axis to create a 3D object",
+      "Cuts a 2D drawing into pieces",
+      "Rounds an edge",
+      "Measures a physical prototype"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does the Split tool do?",
+    a: "Projects a 2D sketch on a plane onto a more complicated 3D face",
+    choices: [
+      "Projects a 2D sketch on a plane onto a more complicated 3D face",
+      "Rounds a sharp edge",
+      "Adds material to a sketch",
+      "Creates an engineering notebook"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What does Move Face do?",
+    a: "Extends a face on a surface into a 3D shape",
+    choices: [
+      "Extends a face on a surface into a 3D shape",
+      "Creates a decision matrix",
+      "Changes the testing variable",
+      "Creates a 2D multiview drawing"
+    ]
+  },
+
+  // ----------------------
+  // Topic 11: Technical Drawing
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is orthographic projection?",
+    a: "A method that shows separate 2D views of an object",
+    choices: [
+      "A method that shows separate 2D views of an object",
+      "A method for making a physical prototype",
+      "A method for testing structural forces",
+      "A method for calculating moment"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which views are typically included in an orthographic drawing?",
+    a: "Front, Top, and Right Side",
+    choices: [
+      "Front, Top, and Right Side",
+      "Front, Bottom, and Left Side only",
+      "Top, Bottom, and Back only",
+      "Isometric, Perspective, and Front"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is an isometric sketch?",
+    a: "A 3D pictorial sketch showing height, width, and depth in one view",
+    choices: [
+      "A 3D pictorial sketch showing height, width, and depth in one view",
+      "A 2D drawing showing only the front",
+      "A testing procedure",
+      "A decision matrix"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Isometric horizontal axes are typically drawn at what angle?",
+    a: "30°",
+    choices: [
+      "30°",
+      "45°",
+      "60°",
+      "90°"
+    ]
+  },
+
+  // ----------------------
+  // Topic 12: Dimensioning
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What do dimension lines show?",
+    a: "Exact numerical measurements",
+    choices: [
+      "Exact numerical measurements",
+      "The name of the engineer",
+      "The color of a material",
+      "The testing procedure"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What do extension lines do?",
+    a: "Extend outward from feature edges to define the boundaries of a dimension",
+    choices: [
+      "Extend outward from feature edges to define the boundaries of a dimension",
+      "Show the direction of force",
+      "Indicate the origin",
+      "Show where a prototype failed"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What are leader lines used for?",
+    a: "Connecting callout text or notes to a specific feature",
+    choices: [
+      "Connecting callout text or notes to a specific feature",
+      "Showing the weight of a model",
+      "Showing the independent variable",
+      "Creating a 3D extrusion"
+    ]
+  },
+
+  // ----------------------
+  // Topic 13: Study Checklist
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which sequence represents a common Onshape modeling workflow?",
+    a: "Sketch → Dimension → Extrude Add/Remove → Revolve → Fillet",
+    choices: [
+      "Sketch → Dimension → Extrude Add/Remove → Revolve → Fillet",
+      "Fillet → Problem Statement → Sketch → Decision Matrix",
+      "Prototype → Sketch → Stakeholder → Moment",
+      "Dimension → Testing → Criteria → Constraint"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which should be included in a properly formatted Engineering Notebook?",
+    a: "An updated table of contents, attached loose sheets, and signed/dated entries",
+    choices: [
+      "An updated table of contents, attached loose sheets, and signed/dated entries",
+      "Only sketches with no dates",
+      "Only final answers",
+      "Only printed CAD models"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Why is alignment important when creating a multiview drawing?",
+    a: "The views must correspond correctly to the same features of the object",
+    choices: [
+      "The views must correspond correctly to the same features of the object",
+      "It makes the drawing colorful",
+      "It eliminates the need for dimensions",
+      "It makes the object 3D"
+    ]
+  },
+
+  {
+    prompt: "True/False",
+    q: "A constraint is a desired feature or goal of a design.",
+    a: "False",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "A criterion describes a desired feature or goal of a design.",
+    a: "True",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "A prototype is normally used to test performance and collect data.",
+    a: "True",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "The dependent variable is the factor deliberately changed by the engineer.",
+    a: "False",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "The independent variable is the factor deliberately changed or controlled during a test.",
+    a: "True",
+    choices: ["True", "False"]
+  }
+
+];
+
+
+// ----------------------
+// Quiz Logic
+// ----------------------
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+const quiz = shuffle(engineeringQuestions);
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+
+function load() {
+  answered = false;
+
+  const item = quiz[index];
+
+  document.getElementById("prompt").textContent = item.prompt;
+  document.getElementById("question").textContent = item.q;
+
+  document.getElementById("progress").textContent =
+    `Question ${index + 1} of ${quiz.length}`;
+
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
+
+  const choices = shuffle(item.choices.slice());
+
+  choices.forEach(c => {
+
+    const el = document.createElement("div");
+
+    el.className = "choice";
+    el.textContent = c;
+
+    el.onclick = () => select(c, el, item.a);
+
+    div.appendChild(el);
+  });
+}
+
+
+function select(choice, el, correctAnswer) {
+
+  if (answered) return;
+
+  answered = true;
+
+  if (choice === correctAnswer) {
+
+    score++;
+
+    el.style.background = "#c8f7c5";
+
+  } else {
+
+    el.style.background = "#f7c5c5";
+
+    const div = document.getElementById("choices");
+
+    Array.from(div.children).forEach(child => {
+
+      if (child.textContent === correctAnswer) {
+
+        child.style.background = "#c8f7c5";
+        child.style.fontWeight = "bold";
+
+      }
+
+    });
+  }
+}
+
+
+function nextQuestion() {
+
+  if (!answered) return;
+
+  index++;
+
+  if (index < quiz.length) {
+
+    load();
+
+  } else {
+
+    document.body.innerHTML = `
+      <h1>Quiz Complete!</h1>
+      <h2>Your Score: ${score} / ${quiz.length}</h2>
+      <p>${Math.round((score / quiz.length) * 100)}%</p>
+      <button onclick="location.reload()">Retake Quiz</button>
+    `;
+
+  }
+}
+
+
+load();
+
+</script>
+
+</body>
+</html>
