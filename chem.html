@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unit 2 Nuclear Chemistry Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+
+  #prompt {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  #question {
+    font-size: 28px;
+    margin: 20px 0;
+  }
+
+  .choice {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  .choice:hover {
+    background: #f0f0f0;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Unit 2 Nuclear Chemistry Quiz</h1>
+
+<div id="prompt"></div>
+<div id="question"></div>
+<div id="choices"></div>
+
+<button onclick="nextQuestion()">Next</button>
+<p id="progress"></p>
+
+<script>
+
+// ----------------------
+// Chemistry Questions
+// Unit 2: Nuclear Chemistry
+// ----------------------
+
+const chemistryQuestions = [
+
+  // ----------------------
+  // Topic 1: Types of Radiation & Nuclear Basics
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "How do atoms become stable in a nuclear reaction?",
+    a: "Through changes in the nucleus",
+    choices: [
+      "Through changes in the nucleus",
+      "By sharing valence electrons",
+      "By gaining or losing outer electrons",
+      "By increasing temperature"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the strong nuclear force?",
+    a: "An attractive force between protons and neutrons in the nucleus",
+    choices: [
+      "An attractive force between protons and neutrons in the nucleus",
+      "A repulsive force between protons",
+      "A force that pulls electrons into the nucleus",
+      "A gravitational force between atoms"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Above which atomic number are all elements inherently unstable and radioactive?",
+    a: "83 (Bismuth)",
+    choices: [
+      "83 (Bismuth)",
+      "92 (Uranium)",
+      "56 (Barium)",
+      "26 (Iron)"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which type of radiation can be stopped by a simple sheet of paper?",
+    a: "Alpha particles",
+    choices: [
+      "Alpha particles",
+      "Beta particles",
+      "Gamma rays",
+      "X-rays"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which type of radiation requires thick lead or heavy concrete to block?",
+    a: "Gamma rays",
+    choices: [
+      "Gamma rays",
+      "Alpha particles",
+      "Beta particles",
+      "Positrons"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What consists of high-energy electromagnetic radiation with no mass and no charge?",
+    a: "Gamma rays",
+    choices: [
+      "Gamma rays",
+      "Alpha particles",
+      "Beta particles",
+      "Neutrons"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a beta particle?",
+    a: "A high-energy electron emitted from the nucleus",
+    choices: [
+      "A high-energy electron emitted from the nucleus",
+      "A helium nucleus with a +2 charge",
+      "A neutral subatomic particle",
+      "A high-frequency light wave"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the Band of Stability?",
+    a: "The pattern formed by plotting neutrons vs. protons of stable nuclei",
+    choices: [
+      "The pattern formed by plotting neutrons vs. protons of stable nuclei",
+      "The safe operating energy level of a nuclear reactor",
+      "The range of temperatures where nuclear fusion can occur",
+      "The thickness of shielding needed to block radiation"
+    ]
+  },
+
+  // ----------------------
+  // Topic 2: Nuclear Equations & Transmutation
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What happens to an atom's mass number during alpha decay?",
+    a: "Decreases by 4",
+    choices: [
+      "Decreases by 4",
+      "Decreases by 2",
+      "Increases by 1",
+      "Remains the same"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What happens to an atom's atomic number during beta decay?",
+    a: "Increases by 1",
+    choices: [
+      "Increases by 1",
+      "Decreases by 1",
+      "Decreases by 2",
+      "Remains the same"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What happens to the mass number of an atom during beta decay?",
+    a: "Remains the same",
+    choices: [
+      "Remains the same",
+      "Decreases by 1",
+      "Increases by 1",
+      "Decreases by 4"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "In a nuclear equation, the terms 'decay' or 'emission' indicate the particle is on which side?",
+    a: "Product side (right side)",
+    choices: [
+      "Product side (right side)",
+      "Reactant side (left side)",
+      "Both sides",
+      "Above the yield arrow"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "In a nuclear equation, the terms 'bombardment' or 'capture' indicate the particle is on which side?",
+    a: "Reactant side (left side)",
+    choices: [
+      "Reactant side (left side)",
+      "Product side (right side)",
+      "Both sides",
+      "Below the yield arrow"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the term for the conversion of one chemical element into another element?",
+    a: "Transmutation",
+    choices: [
+      "Transmutation",
+      "Ionization",
+      "Condensation",
+      "Sublimation"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the product isotope when Uranium-238 undergoes alpha decay?",
+    a: "Thorium-234",
+    choices: [
+      "Thorium-234",
+      "Thorium-238",
+      "Plutonium-238",
+      "Uranium-234"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What isotope is produced when Thorium-234 undergoes beta decay?",
+    a: "Protactinium-234",
+    choices: [
+      "Protactinium-234",
+      "Actinium-234",
+      "Radium-230",
+      "Uranium-238"
+    ]
+  },
+
+  // ----------------------
+  // Topic 3: Fission & Power Generation
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is nuclear fission?",
+    a: "The splitting of a heavy nucleus into lighter, more stable nuclei",
+    choices: [
+      "The splitting of a heavy nucleus into lighter, more stable nuclei",
+      "The combining of light nuclei into a heavier nucleus",
+      "The release of electrons from the outer shell",
+      "The emission of gamma rays without structural change"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Which subatomic particle initiates the nuclear fission of Uranium-235?",
+    a: "Neutron",
+    choices: [
+      "Neutron",
+      "Proton",
+      "Electron",
+      "Alpha particle"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is critical mass?",
+    a: "The minimum mass of fissionable material required to sustain a chain reaction",
+    choices: [
+      "The minimum mass of fissionable material required to sustain a chain reaction",
+      "The maximum weight a nuclear reactor vessel can hold",
+      "The total mass lost during a nuclear decay process",
+      "The mass of one mole of radioactive isotope"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the purpose of control rods in a nuclear power plant?",
+    a: "To absorb excess neutrons and regulate the chain reaction",
+    choices: [
+      "To absorb excess neutrons and regulate the chain reaction",
+      "To heat the water directly inside the turbine",
+      "To split the uranium atoms manually",
+      "To store spent fuel safely underwater"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What primary job does the energy (heat) produced in a nuclear reactor perform?",
+    a: "Boils water to produce steam that turns electricity-generating turbines",
+    choices: [
+      "Boils water to produce steam that turns electricity-generating turbines",
+      "Directly powers the electrical grid via static charge",
+      "Fuses hydrogen atoms into helium",
+      "Cools down the surrounding containment structure"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is the most common form of high-level nuclear waste produced by power plants?",
+    a: "Spent fuel rods",
+    choices: [
+      "Spent fuel rods",
+      "Cooling water discharge",
+      "Carbon dioxide gas",
+      "Ash and smoke"
+    ]
+  },
+
+  // ----------------------
+  // Topic 4: Fusion & Comparison
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is nuclear fusion?",
+    a: "Combining light nuclei to form a heavier, more stable nucleus",
+    choices: [
+      "Combining light nuclei to form a heavier, more stable nucleus",
+      "Splitting a heavy nucleus with a high-speed neutron",
+      "The spontaneous decay of an unstable neutron",
+      "Absorbing electrons into the inner shell"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Where does nuclear fusion naturally occur?",
+    a: "In the sun and stars",
+    choices: [
+      "In the sun and stars",
+      "In modern commercial power plants",
+      "Deep inside Earth's core",
+      "In particle accelerators on Earth"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is a major advantage of nuclear fusion over nuclear fission?",
+    a: "Fusion produces no long-lived radioactive toxic waste",
+    choices: [
+      "Fusion produces no long-lived radioactive toxic waste",
+      "Fusion does not require extreme heat to initiate",
+      "Fusion uses heavy uranium as its main fuel",
+      "Fusion is currently easier to control on Earth"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Why is controlled nuclear fusion currently difficult to sustain on Earth?",
+    a: "It requires plasma temperatures over 100 million Kelvin",
+    choices: [
+      "It requires plasma temperatures over 100 million Kelvin",
+      "Hydrogen fuel is extremely rare on Earth",
+      "It creates dangerous greenhouse gas emissions",
+      "The reaction produces too little energy to be useful"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Where are high-speed collisions used to create artificial transmutations?",
+    a: "Particle accelerators (e.g., CERN, SLAC)",
+    choices: [
+      "Particle accelerators (e.g., CERN, SLAC)",
+      "Cooling towers of fossil fuel plants",
+      "Geological repositories like Yucca Mountain",
+      "Submerged spent fuel pools"
+    ]
+  },
+
+  // ----------------------
+  // Topic 5: Half-Life & Calculations
+  // ----------------------
+
+  {
+    prompt: "Choose the correct answer",
+    q: "What is half-life ($t_{1/2}$)?",
+    a: "The time required for half of the atoms in a radioactive sample to decay",
+    choices: [
+      "The time required for half of the atoms in a radioactive sample to decay",
+      "Half the time it takes for an atom to disintegrate completely",
+      "The time required to heat nuclear fuel to critical mass",
+      "The age of an isotope divided by two"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "If a sample has a shorter half-life, what does it indicate about its nucleus?",
+    a: "The nucleus is less stable",
+    choices: [
+      "The nucleus is less stable",
+      "The nucleus is more stable",
+      "The nucleus has no charge",
+      "The nucleus contains more protons than neutrons"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "If you start with 100 mg of a radioisotope, how much remains after 2 half-lives?",
+    a: "25 mg",
+    choices: [
+      "25 mg",
+      "50 mg",
+      "12.5 mg",
+      "0 mg"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Sodium-24 has a half-life of 15 hours. How many half-lives elapse in 60 hours?",
+    a: "4 half-lives",
+    choices: [
+      "4 half-lives",
+      "2 half-lives",
+      "3 half-lives",
+      "5 half-lives"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Cesium-137 has a half-life of 30 years. How much of a 25.0 kg sample remains after 150 years?",
+    a: "0.781 kg",
+    choices: [
+      "0.781 kg",
+      "1.56 kg",
+      "3.125 kg",
+      "0.390 kg"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Phosphorus-32 has a half-life of 14.3 days. How much of a 1000.0 g block remains after 85.8 days?",
+    a: "15.625 g",
+    choices: [
+      "15.625 g",
+      "31.25 g",
+      "62.5 g",
+      "7.81 g"
+    ]
+  },
+
+  {
+    prompt: "Choose the correct answer",
+    q: "Potassium-42 has a half-life of 12 hours. How much of a 60.0 g sample remains after 60 hours?",
+    a: "1.875 g",
+    choices: [
+      "1.875 g",
+      "3.75 g",
+      "7.50 g",
+      "0.938 g"
+    ]
+  },
+
+  // ----------------------
+  // Topic 6: Conceptual & True/False
+  // ----------------------
+
+  {
+    prompt: "True/False",
+    q: "Nuclear reactions can be sped up or slowed down by changing surrounding temperature or pressure.",
+    a: "False",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "Alpha particles carry a double positive (+2) charge.",
+    a: "True",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "Nuclear power plants emit large amounts of carbon dioxide gas during regular electricity generation.",
+    a: "False",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "Gamma emission causes the mass number of a nucleus to decrease by 1.",
+    a: "False",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "In nuclear fission, one uranium pellet yields energy equivalent to nearly a ton of coal.",
+    a: "True",
+    choices: ["True", "False"]
+  },
+
+  {
+    prompt: "True/False",
+    q: "An isotope with a half-life of billions of years is extremely unstable.",
+    a: "False",
+    choices: ["True", "False"]
+  }
+
+];
+
+
+// ----------------------
+// Quiz Logic
+// ----------------------
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+const quiz = shuffle(chemistryQuestions);
+
+let index = 0;
+let score = 0;
+let answered = false;
+
+
+function load() {
+  answered = false;
+
+  const item = quiz[index];
+
+  document.getElementById("prompt").textContent = item.prompt;
+  document.getElementById("question").textContent = item.q;
+
+  document.getElementById("progress").textContent =
+    `Question ${index + 1} of ${quiz.length}`;
+
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
+
+  const choices = shuffle(item.choices.slice());
+
+  choices.forEach(c => {
+
+    const el = document.createElement("div");
+
+    el.className = "choice";
+    el.textContent = c;
+
+    el.onclick = () => select(c, el, item.a);
+
+    div.appendChild(el);
+  });
+}
+
+
+function select(choice, el, correctAnswer) {
+
+  if (answered) return;
+
+  answered = true;
+
+  if (choice === correctAnswer) {
+
+    score++;
+
+    el.style.background = "#c8f7c5";
+
+  } else {
+
+    el.style.background = "#f7c5c5";
+
+    const div = document.getElementById("choices");
+
+    Array.from(div.children).forEach(child => {
+
+      if (child.textContent === correctAnswer) {
+
+        child.style.background = "#c8f7c5";
+        child.style.fontWeight = "bold";
+
+      }
+
+    });
+  }
+}
+
+
+function nextQuestion() {
+
+  if (!answered) return;
+
+  index++;
+
+  if (index < quiz.length) {
+
+    load();
+
+  } else {
+
+    document.body.innerHTML = `
+      <h1>Quiz Complete!</h1>
+      <h2>Your Score: ${score} / ${quiz.length}</h2>
+      <p>${Math.round((score / quiz.length) * 100)}%</p>
+      <button onclick="location.reload()">Retake Quiz</button>
+    `;
+
+  }
+}
+
+
+load();
+
+</script>
+
+</body>
+</html>
