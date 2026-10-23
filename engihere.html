@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engineering Mock Quiz — PLTW POE</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#182338;--muted:#5c6880;--accent:#3157d5;--accent2:#e8edff;--good:#147d4a;--bad:#b42318;--line:#dce2ee;--gold:#f4b942}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(130deg,#14234a,#3157d5);color:white;padding:32px 18px 26px}
+.hero{max-width:960px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.76rem;font-weight:800;opacity:.8}.hero h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.1;margin:8px 0}.hero p{max-width:720px;color:#e7ecff;margin-bottom:0}
+main{max-width:960px;margin:22px auto;padding:0 14px 60px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}.pill{border:1px solid var(--line);background:white;border-radius:99px;padding:7px 12px;color:var(--muted);font-size:.9rem}
+.progress-wrap{height:8px;background:#e0e5f1;border-radius:20px;overflow:hidden;flex:1;min-width:100px}.progress{height:100%;width:0;background:var(--accent);transition:width .2s}
+.section-title{margin:28px 0 12px;font-size:1.35rem}.section-title span{color:var(--muted);font-size:.9rem;font-weight:500}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 16px #1c2d5010}
+.qhead{display:flex;gap:12px;align-items:flex-start}.num{background:var(--accent2);color:var(--accent);font-weight:800;border-radius:10px;min-width:38px;height:38px;display:grid;place-items:center}.qtitle{font-weight:750;font-size:1.04rem;flex:1}.type{font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.options{display:grid;gap:9px;margin-top:16px}.option{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff}.option:hover{border-color:#8fa3ed;background:#f9faff}.option input{margin-top:5px;accent-color:var(--accent);transform:scale(1.1)}.option:has(input:checked){border-color:var(--accent);background:#f2f5ff}
+input[type=text],input[type=number]{font:inherit;border:1px solid #bfc9db;border-radius:9px;padding:10px 12px;width:min(100%,360px);background:white;color:var(--ink)}
+.diagram{margin:14px 0;background:#f8faff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}.diagram svg{max-width:100%;height:auto}.diagram img{max-width:100%;max-height:220px;object-fit:contain;border-radius:8px}.caption{font-size:.83rem;color:var(--muted);margin-top:5px}
+.hint{color:var(--muted);font-size:.9rem;margin:8px 0}.feedback{display:none;margin-top:12px;padding:12px;border-radius:10px;font-size:.94rem}.feedback.show{display:block}.feedback.correct{background:#e9f8ef;color:#145b38}.feedback.incorrect{background:#fff0ee;color:#8e2119}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}.btn{border:0;border-radius:11px;padding:12px 17px;font:inherit;font-weight:750;cursor:pointer}.primary{background:var(--accent);color:white}.secondary{background:white;color:var(--ink);border:1px solid var(--line)}.result{display:none;background:white;border:2px solid var(--accent);border-radius:16px;padding:22px;margin:20px 0}.result.show{display:block}.score{font-size:2.4rem;font-weight:850;color:var(--accent)}.review-item{padding:10px 0;border-top:1px solid var(--line)}.tag{font-size:.8rem;border-radius:6px;padding:3px 7px;font-weight:800}.tag.good{background:#e5f7ec;color:#14653b}.tag.bad{background:#fff0ee;color:#a12a20}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px}
+@media(max-width:600px){.card{padding:15px}.qhead{gap:9px}.num{min-width:32px;height:32px}}
+</style>
+</head>
+<body>
+<header><div class="hero"><div class="eyebrow">PLTW Principles of Engineering • Practice mode</div><h1>Engineering Mock Quiz</h1><p>Shoe manufacturing, VEX parts, simple machines, and energy/work/power/efficiency. Select answers, solve the calculations, then submit for a score and explanations.</p></div></header>
+<main>
+<div class="toolbar"><span class="pill" id="count">25 questions</span><span class="pill">Select-all questions are labeled</span><div class="progress-wrap"><div class="progress" id="progress"></div></div><span class="pill" id="answered">0 answered</span></div>
+<p class="hint">This practice quiz is based only on the notes you pasted. For numeric answers, enter a number; units are shown in the question. Use g = 9.81 m/s² when needed.</p>
+<div id="quiz"></div>
+<div class="actions"><button class="btn primary" id="submit">Submit quiz & grade</button><button class="btn secondary" id="reset">Try again / reset</button></div>
+<div class="result" id="result" aria-live="polite"></div>
+<footer>Practice site • Your answers are graded in this browser; nothing is submitted online.</footer>
+</main>
+<script>
+const questions = [
+{section:"VEX Parts",type:"multi",q:"Which are the three basic types of VEX parts?",opts:["Assembly","Hardware","Motion","Electrical","Decorative"],ans:[0,1,2],why:"Assembly parts form the frame, hardware holds parts together, and motion parts create movement."},
+{section:"VEX Parts",type:"single",q:"What is the main job of an assembly part?",opts:["Create movement","Connect with hardware to form a robot's frame or skeleton","Measure electrical current","Prevent all friction"],ans:[1],why:"Assembly parts connect together with hardware to form the structure."},
+{section:"VEX Parts",type:"single",q:"In an 8-32 screw, what do the numbers mean?",opts:["8 threads per inch and 32 mm long","8 is the diameter number; 32 is threads per inch","8 mm diameter and 32 cm length","The screw fits only 8 parts"],ans:[1],why:"The first number describes diameter; the second is the number of threads per inch."},
+{section:"VEX Parts",type:"single",q:"Which nut has a plastic insert that helps prevent it from unscrewing due to vibration?",opts:["Regular nut","KEPS nut","Nylock nut","Standoff"],ans:[2],why:"A Nylock nut has a plastic insert that resists loosening from vibration or movement."},
+{section:"VEX Parts",type:"single",q:"Which hex key is used for standard 8-32 screws?",opts:["5/64 inch","3/32 inch","1/4 inch","1/2 inch"],ans:[1],why:"The 3/32-inch hex key is used for standard 8-32 screws. The 5/64-inch key is used for setscrews and 6-32 motor screws."},
+{section:"VEX Parts",type:"multi",q:"Select every correct statement about VEX motion parts.",opts:["Bearings provide a low-friction place for shafts to turn","Shaft collars use a setscrew","Gears are identified by their number of teeth","Standoffs are used to create space between parts","A regular nut has a built-in locking feature"],ans:[0,1,2],why:"Bearings reduce friction, shaft collars have setscrews, and gears are identified by tooth count. Standoffs are hardware used to offset parts; regular nuts have no locking feature."},
+{section:"Shoe Manufacturing",type:"single",q:"Which process builds a 3D object layer by layer?",opts:["Milling","Die cutting","Additive manufacturing / 3D printing","Adhesive bonding"],ans:[2],why:"Additive manufacturing builds material up layer by layer."},
+{section:"Shoe Manufacturing",type:"single",q:"In Fused Deposition Modeling (FDM), what happens?",opts:["A laser hardens liquid resin","Heated filament is laid down according to a CAD drawing","A cutter removes chips from a metal block","A sharp die cuts fabric"],ans:[1],why:"FDM draws filament through a heated extruder and lays it down following a CAD model."},
+{section:"Shoe Manufacturing",type:"single",q:"Stereolithography (SLA) uses which method?",opts:["A laser cures selected areas of liquid resin","A blade cuts the upper shape","Adhesive bonds on contact","Air inflates a parison"],ans:[0],why:"SLA uses a laser to cure or harden specific areas of liquid resin in a vat."},
+{section:"Shoe Manufacturing",type:"single",q:"A factory presses a shaped, sharp-edged tool into layered synthetic fabric to cut shoe uppers. Which process is this?",opts:["Molding","Die cutting","Milling","SLA printing"],ans:[1],why:"Die cutting uses a specialized shaped die to cut materials such as fabric, foam, cardboard, and paper." ,image:"https://instructional-resources.pltw.org/PLTW_Engineering/50251_PrinciplesOfEngineering/interactives/Shoe_Manufacturing_Processes/assets/img/dough-gbca887b71_640.jpg",caption:"Cookie cutter is an analogy for die cutting."},
+{section:"Shoe Manufacturing",type:"single",q:"Which adhesive statement matches your notes?",opts:["PCP requires pressure; PU bonds on contact","Both PCP and PU always need no pressure","PU requires pressure to form a strong bond; PCP has high green strength and bonds on contact","Neither adhesive is used to attach soles"],ans:[2],why:"PU requires pressure for a strong bond. PCP has high green strength, meaning it bonds on contact."},
+{section:"Shoe Manufacturing",type:"multi",q:"Which statements about fasteners are correct? (Select all that apply.)",opts:["Stitching and rivets are common footwear fasteners","Fasteners mechanically join two things","Fasteners can make boots easier to resole, reducing waste","Fasteners are always faster and less labor-intensive than every other process"],ans:[0,1,2],why:"Fasteners mechanically join things. Stitching and rivets are common, and replaceable/resoleable soles can reduce waste. Fastening can be labor-intensive."},
+{section:"Shoe Manufacturing",type:"single",q:"What is 'flash' in the described outsole molding process?",opts:["A laser used in SLA","Material that squeezes out between mold halves and is usually trimmed","Waste chips from milling","A chemical solvent"],ans:[1],why:"In the described bivalve mold process, excess material squeezed between the mold halves is called flash."},
+{section:"Shoe Manufacturing",type:"single",q:"Which process removes material using rotating cutter heads and can produce waste chips?",opts:["Milling","Additive manufacturing","Adhesive bonding","Die cutting"],ans:[0],why:"Milling is subtractive: rotating cutters remove material from a workpiece. It is precise but generates chips."},
+{section:"Shoe Manufacturing",type:"multi",q:"Which are potential sustainability benefits of 3D printing described in your notes?",opts:["It can leave very little waste material","CAD designs can be optimized for strength with less material","It is less energy-intensive than many traditional processes","It can never contribute to disposable consumer waste"],ans:[0,1,2],why:"3D printing can reduce waste and energy use, and CAD optimization can make parts lighter. Easy production can also increase disposable goods sent to landfills."},
+{section:"Simple Machines",type:"single",q:"What is a compound machine?",opts:["A machine with no moving parts","A machine made of two or more simple machines","Any machine with a motor","A machine that creates energy"],ans:[1],why:"A compound machine combines two or more simple machines."},
+{section:"Simple Machines",type:"single",q:"In a first-class lever, where is the fulcrum?",opts:["Between effort and resistance","Between the effort and the end of the lever, with load at fulcrum","Always at the far end next to the resistance","There is no fulcrum"],ans:[0],why:"The fulcrum lies between the effort force and resistance force. Examples include seesaws, crowbars, pliers, and scissors.",diagram:"lever1"},
+{section:"Simple Machines",type:"single",q:"Which lever class always has mechanical advantage greater than 1, with the resistance between fulcrum and effort?",opts:["First class","Second class","Third class","None"],ans:[1],why:"A second-class lever places the load between fulcrum and effort and always has MA greater than 1. A wheelbarrow is an example.",diagram:"lever2"},
+{section:"Simple Machines",type:"single",q:"A human arm is an example of which lever class in the notes?",opts:["First class","Second class","Third class","A pulley"],ans:[2],why:"In a third-class lever, effort is between fulcrum and resistance. It gains speed/distance but has MA less than 1.",diagram:"lever3"},
+{section:"Simple Machines",type:"single",q:"What does a fixed pulley do?",opts:["Its axle moves with the load","Changes the direction of force; its axle is attached to a support","Always cuts effort force in half","Converts electrical power into heat"],ans:[1],why:"A fixed pulley has an axle attached to a supporting structure and changes force direction."},
+{section:"Simple Machines",type:"multi",q:"Which statements about machines and work are true?",opts:["Machines can change force magnitude or direction","Machines create extra energy","A machine may trade a smaller effort force for a greater effort distance","In an ideal machine, friction losses are ignored"],ans:[0,2,3],why:"Machines can alter force and distance/direction, but cannot create energy. IMA assumes ideal conditions and ignores losses such as friction."},
+{section:"Simple Machines",type:"single",q:"A machine has MA = 3. If you apply 10 lb of effort force, what resistance force can it ideally lift?",opts:["3.3 lb","10 lb","13 lb","30 lb"],ans:[3],why:"Output force = MA × effort force = 3 × 10 lb = 30 lb."},
+{section:"Energy, Work & Power",type:"single",q:"Which equation calculates work when force is parallel to the distance moved?",opts:["W = F × d","P = I × V","P = W ÷ t","η = input ÷ output"],ans:[0],why:"Work is W = F·d. Force is in newtons and distance in meters, giving joules (N·m = J)."},
+{section:"Energy, Work & Power",type:"number",q:"A winch lifts a 100.0 g mass vertically by 0.300 m. Using g = 9.81 m/s², calculate the work done in joules. (Enter a number.)",unit:"J",ans:0.2943,tolerance:0.015,why:"Convert 100.0 g to 0.100 kg. Weight = mg = 0.100 × 9.81 = 0.981 N. Work = Fd = 0.981 × 0.300 = 0.2943 J."},
+{section:"Energy, Work & Power",type:"number",q:"The winch does 0.2943 J of work in 3.0 s. What is its mechanical output power? (Enter a number.)",unit:"W",ans:0.0981,tolerance:0.006,why:"Power = work ÷ time = 0.2943 J ÷ 3.0 s = 0.0981 W."},
+{section:"Energy, Work & Power",type:"number",q:"A circuit has voltage 4.5 V and current 0.40 A. Calculate electrical input power using P = I × V.",unit:"W",ans:1.8,tolerance:0.03,why:"P = I × V = 0.40 A × 4.5 V = 1.8 W."},
+{section:"Energy, Work & Power",type:"number",q:"A system has 1.8 W of electrical input power and 0.90 W of useful mechanical output power. Calculate efficiency as a percentage.",unit:"%",ans:50,tolerance:1,why:"Efficiency = output ÷ input × 100% = 0.90 ÷ 1.8 × 100% = 50%."},
+{section:"Energy, Work & Power",type:"multi",q:"Which statements about energy and power are correct?",opts:["Energy cannot be created or destroyed, but it can change form","Work depends on force and distance, not time","Power is the rate at which work is done","Electrical power can be calculated using P = I × V","A more efficient system wastes a greater share of input energy"],ans:[0,1,2,3],why:"Energy is conserved and transferred/transformed. Work depends on force and distance. Power is work per time; electrical power is current × voltage. Higher efficiency means a greater share of input becomes desired output."}
+];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function leverSVG(n){
+ const labels = n===1?["Effort","Fulcrum","Resistance"]:n===2?["Fulcrum","Resistance","Effort"]:["Fulcrum","Effort","Resistance"];
+ let xs=n===1?[85,220,355]:n===2?[85,190,355]:[85,190,355];
+ return `<div class="diagram"><svg viewBox="0 0 440 125" role="img" aria-label="Lever class diagram"><line x1="45" y1="62" x2="395" y2="62" stroke="#3157d5" stroke-width="8" stroke-linecap="round"/><polygon points="${xs[n===1?1:0]-18},94 ${xs[n===1?1:0]+18},94 ${xs[n===1?1:0]},62" fill="#f4b942" stroke="#8b681d" stroke-width="1.5"/>${(n===1?[85,355]:n===2?[190,355]:[190,355]).map((x,i)=>`<line x1="${x}" y1="20" x2="${x}" y2="48" stroke="${i===0?'#147d4a':'#b42318'}" stroke-width="4"/><polygon points="${x-7},42 ${x+7},42 ${x},52" fill="${i===0?'#147d4a':'#b42318'}"/>`).join("")}<text x="220" y="116" font-size="12" text-anchor="middle" fill="#5c6880">Simplified lever illustration</text></svg><div class="caption">Class ${n}: ${n===1?"fulcrum between effort and resistance":n===2?"resistance between fulcrum and effort":"effort between fulcrum and resistance"}</div></div>`;
+}
+function render(){
+ let html="", last="";
+ questions.forEach((q,i)=>{
+ if(q.section!==last){html+=`<h2 class="section-title">${esc(q.section)} <span>• section</span></h2>`;last=q.section}
+ let typeLabel=q.type==="multi"?"Select all that apply":q.type==="number"?"Calculation / numeric answer":"Multiple choice";
+ html+=`<section class="card" data-q="${i}"><div class="qhead"><div class="num">${i+1}</div><div class="qtitle">${esc(q.q)}<div class="type">${typeLabel}</div></div></div>`;
+ if(q.image) html+=`<div class="diagram"><img src="${esc(q.image)}" alt="Manufacturing example image" loading="lazy" onerror="this.style.display='none'"><div class="caption">${esc(q.caption||"Image reference")}</div></div>`;
+ if(q.diagram) html+=leverSVG(Number(q.diagram.slice(-1)));
+ if(q.type==="number"){html+=`<p><input type="number" step="any" id="a${i}" aria-label="Answer to question ${i+1}" placeholder="Enter value"> <strong>${esc(q.unit)}</strong></p><p class="hint">Round reasonably; a tolerance is allowed.</p>`}
+ else {html+=`<div class="options">${q.opts.map((o,j)=>`<label class="option"><input type="${q.type==="multi"?"checkbox":"radio"}" name="q${i}" value="${j}"><span>${esc(o)}</span></label>`).join("")}</div>`}
+ html+=`<div class="feedback" id="f${i}"></div></section>`;
+ });
+ document.getElementById("quiz").innerHTML=html;
+ document.getElementById("count").textContent=questions.length+" questions";
+ document.querySelectorAll("#quiz input").forEach(el=>el.addEventListener("change",updateProgress));
+ document.querySelectorAll("#quiz input[type=number]").forEach(el=>el.addEventListener("input",updateProgress));
+}
+function getAnswer(i){let q=questions[i];if(q.type==="number"){let v=document.getElementById("a"+i).value;return v===""?null:Number(v)}let els=[...document.querySelectorAll(`input[name="q${i}"]:checked`)];return els.length?els.map(e=>Number(e.value)):null}
+function isCorrect(q,a){if(a===null)return false;if(q.type==="number")return Math.abs(a-q.ans)<=q.tolerance;let expected=[...q.ans].sort((a,b)=>a-b), actual=[...a].sort((a,b)=>a-b);return expected.length===actual.length&&expected.every((v,i)=>v===actual[i])}
+function updateProgress(){let n=questions.filter((q,i)=>getAnswer(i)!==null).length;document.getElementById("answered").textContent=n+" answered";document.getElementById("progress").style.width=(n/questions.length*100)+"%"}
+function submit(){
+ let score=0,review=[];
+ questions.forEach((q,i)=>{let a=getAnswer(i),ok=isCorrect(q,a);if(ok)score++;let f=document.getElementById("f"+i);f.className="feedback show "+(ok?"correct":"incorrect");let answerText=q.type==="number"?`${q.ans} ${q.unit}`:q.ans.map(j=>q.opts[j]).join("; ");let given=a===null?"No answer":q.type==="number"?`${a} ${q.unit}`:a.map(j=>q.opts[j]).join("; ");f.innerHTML=`<strong>${ok?"Correct!":"Not quite."}</strong> ${esc(q.why)}<br><strong>Correct answer:</strong> ${esc(answerText)}${!ok?`<br><strong>Your answer:</strong> ${esc(given)}`:""}`;review.push({i,ok,given,answerText})});
+ let pct=Math.round(score/questions.length*100),miss=review.filter(x=>!x.ok);
+ document.getElementById("result").className="result show";
+ document.getElementById("result").innerHTML=`<div class="type">Your result</div><div class="score">${score}/${questions.length} • ${pct}%</div><p>${pct>=90?"Excellent work — review the few details you missed.":pct>=75?"Good foundation. Review the explanations below for anything you missed.":"Use the explanations to review, then reset and try again."}</p><h3>Review missed questions (${miss.length})</h3>${miss.length?miss.map(x=>`<div class="review-item"><span class="tag bad">Q${x.i+1}</span> ${esc(questions[x.i].q)}<br><span class="hint">Correct answer: ${esc(x.answerText)}</span></div>`).join(""):"You got every question correct!"}`;
+ document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function reset(){document.querySelectorAll("#quiz input").forEach(el=>{if(el.type==="checkbox"||el.type==="radio")el.checked=false;else el.value=""});document.querySelectorAll(".feedback").forEach(el=>{el.className="feedback";el.innerHTML=""});document.getElementById("result").className="result";document.getElementById("result").innerHTML="";updateProgress();window.scrollTo({top:0,behavior:"smooth"})}
+document.getElementById("submit").addEventListener("click",submit);document.getElementById("reset").addEventListener("click",reset);
+render();updateProgress();
+</script>
+</body>
+</html>
