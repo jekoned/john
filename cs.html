@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AP CSP Unit 2 — Interactive Practice Quiz</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#182338;--muted:#5c6880;--accent:#3157d5;--accent2:#e8edff;--good:#147d4a;--bad:#b42318;--line:#dce2ee;--gold:#f4b942}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(130deg,#14234a,#3157d5);color:white;padding:32px 18px 26px}
+.hero{max-width:960px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.76rem;font-weight:800;opacity:.8}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.1;margin:8px 0}
+.hero p{max-width:760px;color:#e7ecff;margin:0}
+main{max-width:960px;margin:22px auto;padding:0 14px 60px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.pill{border:1px solid var(--line);background:white;border-radius:99px;padding:7px 12px;color:var(--muted);font-size:.9rem}
+.progress-wrap{height:8px;background:#e0e5f1;border-radius:20px;overflow:hidden;flex:1;min-width:100px}
+.progress{height:100%;width:0;background:var(--accent);transition:width .2s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #1725540a}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.qnum{font-weight:800;color:var(--accent);font-size:.88rem}
+.tag{font-size:.75rem;color:#43516a;background:#eef1f7;padding:4px 9px;border-radius:99px;white-space:nowrap}
+.question{font-size:1.08rem;font-weight:700;margin:8px 0 14px}
+.code{background:#101827;color:#e7edf9;border-radius:10px;padding:13px;overflow:auto;font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;margin:10px 0}
+.options{display:grid;gap:9px}
+.option{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);padding:11px 12px;border-radius:11px;cursor:pointer;transition:.15s}
+.option:hover{border-color:#9aaae8;background:#f8f9ff}
+.option input{margin-top:4px;accent-color:var(--accent);transform:scale(1.08)}
+.option.selected{border-color:var(--accent);background:var(--accent2)}
+.feedback{display:none;margin-top:13px;border-radius:11px;padding:12px 14px}
+.feedback.show{display:block}.feedback.correct{background:#eaf7ef;color:#145c37;border:1px solid #b7e2c6}
+.feedback.incorrect{background:#fff0ee;color:#8c2018;border:1px solid #f0c1bc}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+button{border:0;border-radius:10px;padding:11px 17px;font-weight:750;font-size:.95rem;cursor:pointer}
+.primary{background:var(--accent);color:white}.secondary{background:white;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.result{display:none;background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:20px 0}
+.result.show{display:block}.score{font-size:2.2rem;font-weight:850;color:var(--accent)}
+.small{font-size:.9rem;color:var(--muted)}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:12px}
+@media(max-width:600px){.card{padding:15px}.qhead{align-items:center}}
+</style>
+</head>
+<body>
+<header><div class="hero">
+<div class="eyebrow">AP Computer Science Principles • Unit 2</div>
+<h1>Interactive Practice Exam</h1>
+<p>35 AP-style questions based on your class quizzes, lesson notes, and vocabulary. Includes code tracing, multiple-select questions, instant explanations, scoring, and a missed-question review.</p>
+</div></header>
+<main>
+<div class="toolbar">
+<span class="pill" id="count">0 / 35 answered</span>
+<span class="pill">35 questions</span><span class="pill">Multiple choice + select two</span>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+</div>
+<div class="small">Choose one answer unless a question says <b>Select two</b>. Your score is calculated after you submit.</div>
+<div id="quiz"></div>
+<div class="actions">
+<button class="primary" id="submit">Submit answers</button>
+<button class="secondary" id="reset">Reset / reshuffle</button>
+</div>
+<div class="result" id="result" aria-live="polite"></div>
+<footer>Study practice only • Based on the AP CSP Unit 2 material you provided</footer>
+</main>
+<script>
+const questions = [
+{topic:"Algorithms & sequencing",type:"one",q:"Which statement best describes sequencing in an algorithm?",o:["Instructions are carried out one at a time in a specified order.","A condition determines which block runs.","A set of instructions repeats until a condition is met.","The program chooses a random instruction."],a:[0],e:"Sequencing means instructions execute one at a time, in order. Selection chooses between paths; iteration repeats instructions."},
+{topic:"Algorithms & sequencing",type:"one",q:"A student writes these steps: put bread on a plate, add filling, place the second slice on top, cut the sandwich. Which structure is most directly represented?",o:["Iteration","Selection","Sequencing","Boolean logic"],a:[2],e:"The steps are performed in a particular order, which is sequencing."},
+{topic:"Flowcharts",type:"one",q:"A typical decision symbol in a flowchart uses what kind of result to choose a path?",o:["A text paragraph","A Boolean true/false result","A decimal value only","A procedure name"],a:[1],e:"A decision block evaluates a condition. One path is followed when it is true and the other when it is false."},
+{topic:"Pseudocode",type:"one",q:"Which best describes pseudocode?",o:["A specific programming language that a computer executes directly","A detailed, readable description of an algorithm that is not tied to one programming language","A diagram made only of flowchart symbols","A low-level language written in binary"],a:[1],e:"Pseudocode expresses algorithmic ideas in a precise, readable way without using the syntax of a particular executable language."},
+{topic:"Pseudocode & math",type:"one",q:"In the course notes, MOD has the same order-of-operations precedence as which operators?",o:["Addition and subtraction","Exponentiation","Multiplication and division","Comparison operators"],a:[2],e:"The notes state that MOD has the same precedence as multiplication (*) and division (/)."},
+{topic:"Variables & assignment",type:"one",q:"What is displayed by this code?",code:"a ← 0\\nb ← 1\\nc ← a\\na ← 2\\nb ← a\\nDISPLAY(b)\\nDISPLAY(c)",o:["2 then 0","2 then 2","0 then 0","1 then 0"],a:[0],e:"c receives the current value of a (0). Later, a becomes 2 and b receives 2. The displays are b = 2, then c = 0."},
+{topic:"Variables & assignment",type:"one",q:"What is displayed?",code:"a ← 2\\nb ← 6\\nc ← 12\\na ← b\\nb ← c\\nDISPLAY(a)\\nDISPLAY(c)",o:["12 then 12","2 then 12","2 then 6","6 then 12"],a:[3],e:"a is assigned the current value of b (6). Then b becomes 12, while c remains 12. The output is 6 followed by 12."},
+{topic:"Selection",type:"one",q:"Which structure is represented by an IF statement that runs a block only when a condition is true?",o:["Sequencing","Selection","Iteration","Abstraction"],a:[1],e:"Selection determines which statements execute based on whether a condition is true or false."},
+{topic:"Selection",type:"one",q:"A program should display “yes” only when x is greater than y AND y is at most 20. Which condition is correct?",o:["(x > y) OR (y ≤ 20)","(x > y) AND (y ≤ 20)","(x < y) AND (y > 20)","(x = y) OR (y = 20)"],a:[1],e:"Both requirements must be true, so AND is required: x > y and y ≤ 20."},
+{topic:"Boolean logic",type:"one",q:"What does the Boolean operator OR mean?",o:["Both conditions must be true","At least one of the conditions must be true","Both conditions must be false","The conditions are repeated"],a:[1],e:"OR evaluates to true when at least one condition is true. AND requires both conditions to be true."},
+{topic:"Nested selection",type:"one",q:"What is displayed by this code?",code:"a ← 6\\nb ← 11\\nIF (a = b)\\n{ DISPLAY(“January”) }\\nELSE\\n{\\n  IF (a > b)\\n  { DISPLAY(“February”) }\\n  ELSE\\n  {\\n    IF (a > 0)\\n    { DISPLAY(“March”) }\\n    ELSE\\n    { DISPLAY(“April”) }\\n  }\\n}",o:["January","February","March","April"],a:[2],e:"a is not equal to b, and a is not greater than b. The final condition a > 0 is true, so “March” is displayed."},
+{topic:"Modulo",type:"one",q:"Which condition determines whether a positive integer value is a multiple of 5?",o:["value MOD 1 = 5","value MOD 5 = 1","value MOD 0 = 5","value MOD 5 = 0"],a:[3],e:"MOD returns the remainder. A multiple of 5 leaves remainder 0 when divided by 5."},
+{topic:"Modulo",type:"one",q:"If turn starts at 0 and is increased by 1 before each player's turn, which condition identifies Player 1 when Player 1 always goes first?",o:["turn MOD 2 = 1","turn MOD 2 = 0","turn = 1 only","turn > 0"],a:[0],e:"Player 1's turns have odd turn values (1, 3, 5...). Odd values have a remainder of 1 when divided by 2."},
+{topic:"Iteration",type:"one",q:"What is iteration?",o:["Choosing one branch from two paths","Repeating a set of instructions","Naming a reusable procedure","Executing instructions in binary"],a:[1],e:"Iteration is repetition: a loop runs its instructions again until its stopping condition is met or its set count is complete."},
+{topic:"Iteration",type:"one",q:"What values are displayed?",code:"m ← 2\\nREPEAT UNTIL (m > 6)\\n{\\n  DISPLAY(m)\\n  m ← m + 2\\n}",o:["2, 4, 6","2, 4","2, 4, 6, 8","0, 2, 4, 6"],a:[0],e:"The loop displays 2, then 4, then 6. After m becomes 8, the condition m > 6 is true and the loop exits."},
+{topic:"Iteration",type:"one",q:"A REPEAT UNTIL loop exits when its condition is:",o:["False","True","A number greater than zero only","Never evaluated"],a:[1],e:"REPEAT UNTIL continues repeating until the condition becomes true. This is a key difference from a loop that repeats while a condition is true."},
+{topic:"Iteration",type:"one",q:"A loop based on a condition can become an infinite loop when:",o:["It contains an IF statement","Its condition never becomes true (for REPEAT UNTIL) or never becomes false (for a while-style loop)","It has an output statement","It uses a counter variable"],a:[1],e:"A condition-controlled loop can continue indefinitely if its stopping condition is never reached."},
+{topic:"Iteration",type:"one",q:"What is the final value of x?",code:"x ← 6\\nREPEAT UNTIL (x MOD 2 = 1)\\n{\\n  x ← x + 3\\n}",o:["6","7","9","12"],a:[2],e:"Initially 6 MOD 2 = 0, so the loop runs once and adds 3. Now x = 9 and 9 MOD 2 = 1, so it exits."},
+{topic:"Nested loops",type:"one",q:"What is displayed?",code:"x ← 0\\na ← 3\\nk ← 4\\nREPEAT a TIMES\\n{\\n  REPEAT k TIMES\\n  { x ← x + a }\\n  x ← x * (-1)\\n}\\nDISPLAY(x)",o:["12","-9","9","-12"],a:[3],e:"Each inner loop adds 3 four times, adding 12. Outer pass 1: 0 → 12 → -12. Pass 2: -12 → 0 → 0. Pass 3: 0 → 12 → -12."},
+{topic:"Iteration & counters",type:"one",q:"A die is rolled 5 times. odd_counter counts how many rolls are odd. Which condition means there were more odd rolls than even rolls?",o:["roll_counter > 2","odd_counter > 3","roll_counter > 3","odd_counter > 2"],a:[3],e:"With 5 rolls, more odd than even means at least 3 odd rolls. Therefore odd_counter must be greater than 2."},
+{topic:"Scratch",type:"one",q:"A Scratch sprite moves around the screen. What is needed for it to leave a visible trail using the Pen extension?",o:["A say block","A pen down command","A forever block only","A change size block"],a:[1],e:"Sprites do not leave a trace by default. The Pen extension must be used and the pen down command must run."},
+{topic:"Scratch",type:"one",q:"What happens when code inside a forever loop contains an IF condition that remains false?",o:["The forever loop stops","The IF block runs anyway","The loop keeps checking the condition, but the IF block's instructions do not run","The program skips directly to code below the forever loop"],a:[2],e:"The forever loop continues indefinitely and repeatedly checks the IF condition. If it stays false, the instructions inside the IF block are skipped."},
+{topic:"Procedures & abstraction",type:"one",q:"What is a procedure?",o:["A named collection of steps in an algorithm that can be reused","A variable that stores a Boolean value","A loop that must run forever","A type of flowchart symbol"],a:[0],e:"A procedure is a named, reusable collection of steps. It supports abstraction by allowing details to be called without restating them."},
+{topic:"Procedures & abstraction",type:"one",q:"In a procedure call such as MoveTurn(2, 1), what are 2 and 1?",o:["Comments","Parameters/arguments supplied to the procedure","Boolean operators","Loop conditions"],a:[1],e:"The values supplied in the call are arguments for the procedure's parameters. In the class example, Moves and Turns determine what the procedure does."},
+{topic:"Procedures & abstraction",type:"one",q:"A procedure returns true only if a number is positive and an integer. Which name best describes it?",o:["IS_NEG_FLOAT","IS_POS_INT","CHECK_ALL","NUMBER"],a:[1],e:"The procedure checks number > 0 and whether it is an integer, so IS_POS_INT is a meaningful name."},
+{topic:"Comments & collaboration",type:"multi",q:"Which practices make a program easier for other people to understand? Select two.",o:["Choose meaningful names for variables and procedures","Repeat code blocks to emphasize their importance","Comment on the purpose and behavior of variables and procedures","Remove all documentation before sharing"],a:[0,2],e:"Meaningful names and useful comments/documentation make the purpose and behavior of code clearer, especially for collaborators and readers with less coding experience."},
+{topic:"Comments & documentation",type:"one",q:"Which statement about comments is NOT true?",o:["Comments can help programmers develop and maintain programs","Comments can help people collaborate","All published programs have their comments available","Comments can explain the purpose of code"],a:[2],e:"Not all published programs expose their comments. Closed-source software may not make source code or its documentation publicly available."},
+{topic:"Solvability",type:"one",q:"What is an unsolvable problem, as described in the course vocabulary?",o:["A problem that cannot be solved using any algorithm","A problem that takes more than one loop","A problem that requires a list","A problem with a syntax error"],a:[0],e:"The course vocabulary defines an unsolvable problem as one that cannot be solved using any algorithm."},
+{topic:"Halting Problem",type:"one",q:"What does the Halting Problem demonstrate?",o:["Every program eventually stops","There cannot be a program that correctly determines for every possible program whether it will halt or run forever","A loop cannot contain an IF statement","Programs cannot use Boolean values"],a:[1],e:"The Halting Problem shows that no general algorithm can determine for every possible program whether it halts or runs forever."},
+{topic:"Efficiency & scalability",type:"multi",q:"Which two factors are used to consider the efficiency of an algorithm? Select two.",o:["The time required to run","The number of characters in the source code","The programming language's name","The amount of resources or storage required"],a:[0,3],e:"The course quiz identifies run time and resource/storage requirements as important measures of algorithm efficiency."},
+{topic:"Efficiency & scalability",type:"one",q:"What does scalability describe?",o:["How colorful a program's interface is","How well an algorithm performs as the problem size increases","How many comments a program contains","Whether a program uses a sprite"],a:[1],e:"Scalability is about how well an algorithm performs at increasingly larger scales."},
+{topic:"Search algorithms",type:"one",q:"Which statement about binary search is correct?",o:["It checks every item from the beginning","It repeatedly divides the search interval in half and requires ordered data","It works only on random, unsorted data","It always takes the same number of steps regardless of list size"],a:[1],e:"Binary search compares against the middle of an ordered collection, then continues in the relevant half. The data must be sorted."},
+{topic:"Search algorithms",type:"one",q:"A sequential search is best described as:",o:["Checking items one at a time until the target is found","Dividing a sorted list in half repeatedly","Guessing a value at random","Sorting items by preference"],a:[0],e:"Sequential (linear) search checks each item in turn until it finds a match or reaches the end."},
+{topic:"Search algorithms",type:"one",q:"A collection of 256 flavors is sorted alphabetically. Which approach finds a requested flavor most efficiently among these choices?",o:["Alphabetical order with sequential search","Preference order with binary search","Alphabetical order with binary search","Random order with sequential search"],a:[2],e:"Binary search is efficient on ordered data. Alphabetical ordering is clear and stable, so alphabetical order plus binary search is the best choice."},
+{topic:"Heuristics",type:"one",q:"When is a heuristic approach most beneficial?",o:["When an exact answer is quick and required","When an exact solution would take an unreasonable amount of time and an approximate solution is acceptable","When no approximation is acceptable","Whenever a program contains a loop"],a:[1],e:"Heuristics are rules of thumb that can produce approximate solutions quickly. They are useful when exact solutions are impractical and an approximation is acceptable."},
+{topic:"Big-O & logarithmic behavior",type:"one",q:"What does logarithmic behavior mean in the course vocabulary?",o:["Doubling the problem size requires twice as much work","Doubling the problem size requires one extra unit of work","The program's work never changes","The algorithm must use a random number"],a:[1],e:"The notes describe logarithmic behavior as doubling the size of a problem requiring only one extra unit of work."},
+{topic:"Moore's Law",type:"one",q:"Which statement best describes Moore's Law as presented in your class material?",o:["The number of computers doubles every month","The number of transistors that can fit on a chip roughly doubles every one to two years","The speed of every program doubles every year","The number of malicious attacks doubles every two years"],a:[1],e:"Your notes describe Gordon Moore's prediction that the number of transistors fitting on a chip would roughly double every one to two years."},
+{topic:"Logic gates & hardware",type:"one",q:"A logic gate is best described as:",o:["A hardware abstraction modeled by a Boolean function","A software comment","A type of search algorithm","A variable that stores a list"],a:[0],e:"The Unit 2.10 lesson defines a logic gate as a hardware abstraction modeled by a Boolean function."},
+{topic:"Logic gates & hardware",type:"one",q:"Which sequence best represents the hardware abstraction described in the lesson?",o:["Transistors/diodes → logic gates → integrated circuits → hardware components","Hardware components → comments → procedures → transistors","Algorithms → sprites → logic gates → variables","Binary search → transistors → pseudocode → memory"],a:[0],e:"The lesson explains that transistors and diodes act as switches; logic gates combine into integrated circuits (microchips), which form hardware components."},
+{topic:"Logic & Boolean operators",type:"one",q:"A program checks two conditions at the same time and should proceed only if BOTH are true. Which operator should it use?",o:["OR","AND","MOD","NOT"],a:[1],e:"AND is true only when both conditions are true. OR is true when at least one condition is true."}
+];
+
+let order=[], submitted=false;
+const quiz=document.getElementById("quiz");
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function render(){
+  submitted=false; order=shuffle(questions.map((q,i)=>({...q,original:i,options:shuffle(q.o.map((v,j)=>({v,old:j})))})));
+  quiz.innerHTML="";
+  order.forEach((q,idx)=>{
+    const card=document.createElement("section");card.className="card";card.dataset.index=idx;
+    const multi=q.type==="multi";
+    card.innerHTML=`<div class="qhead"><div class="qnum">QUESTION ${idx+1} / ${order.length}</div><span class="tag">${q.topic} · ${multi?"Select two":"Choose one"}</span></div><div class="question">${q.q}</div>${q.code?`<div class="code">${q.code.replaceAll("\\n","\n")}</div>`:""}<div class="options"></div><div class="feedback" id="fb${idx}"></div>`;
+    const opts=card.querySelector(".options");
+    q.options.forEach((opt,k)=>{
+      const label=document.createElement("label");label.className="option";
+      label.innerHTML=`<input type="${multi?"checkbox":"radio"}" name="q${idx}" value="${opt.old}"><span><b>${String.fromCharCode(65+k)}.</b> ${opt.v}</span>`;
+      const input=label.querySelector("input");
+      input.addEventListener("change",()=>{label.classList.toggle("selected",input.checked);updateProgress();});
+      opts.appendChild(label);
+    });
+    quiz.appendChild(card);
+  });
+  document.getElementById("result").className="result";document.getElementById("result").innerHTML="";
+  document.getElementById("submit").disabled=false;updateProgress();
+}
+function getSelected(idx){return [...document.querySelectorAll(`input[name="q${idx}"]:checked`)].map(x=>Number(x.value)).sort((a,b)=>a-b);}
+function updateProgress(){
+  let n=0;order.forEach((q,i)=>{if(getSelected(i).length)n++;});
+  document.getElementById("count").textContent=`${n} / ${order.length} answered`;
+  document.getElementById("progress").style.width=`${n/order.length*100}%`;
+}
+function submit(){
+ if(submitted)return;submitted=true;let score=0,missed=[];
+ order.forEach((q,i)=>{
+   const chosen=getSelected(i),correct=[...q.a].sort((a,b)=>a-b);
+   const ok=chosen.length===correct.length&&chosen.every((v,j)=>v===correct[j]);
+   if(ok)score++;else missed.push(i+1);
+   const fb=document.getElementById(`fb${i}`);fb.className=`feedback show ${ok?"correct":"incorrect"}`;
+   const correctText=q.a.map(old=>{const pos=q.options.findIndex(x=>x.old===old);return `${String.fromCharCode(65+pos)}. ${q.o[old]}`;}).join("<br>");
+   fb.innerHTML=`<b>${ok?"Correct!":"Not quite."}</b><br><b>Correct answer${q.a.length>1?"s":""}:</b><br>${correctText}<br><br>${q.e}`;
+   document.querySelectorAll(`input[name="q${i}"]`).forEach(x=>x.disabled=true);
+ });
+ const pct=Math.round(score/order.length*100),res=document.getElementById("result");
+ res.className="result show";
+ res.innerHTML=`<div class="small">YOUR RESULT</div><div class="score">${score} / ${order.length} (${pct}%)</div><p>${pct>=90?"Excellent work — you have a strong handle on this material.":pct>=80?"Good work. Review the explanations for anything you missed.":pct>=70?"You're getting there. Focus on the missed topics and try again.":"Use the explanations as a study guide, then reset and try another shuffled attempt."}</p><p><b>Missed questions:</b> ${missed.length?missed.join(", "):"None — perfect score!"}</p><p class="small">Scroll through the quiz to review each explanation. Reset / reshuffle creates a fresh attempt.</p>`;
+ document.getElementById("submit").disabled=true;
+ res.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function reset(){render();window.scrollTo({top:0,behavior:"smooth"});}
+document.getElementById("submit").addEventListener("click",submit);
+document.getElementById("reset").addEventListener("click",reset);
+render();
+</script>
+</body>
+</html>
